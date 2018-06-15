@@ -10,7 +10,7 @@
                     @Html.LabelFor(m => m.PaySlips.EarnerType)
                     <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Earner Type"></i>
                     <br />
-                    @Html.EnumDropDownListFor(model => model.PaySlips.EarnerType, "Earner Type", new { @class = "form-control ddl-earnerType form-input-custom", style = "display:inline-block" })
+                    @Html.EnumDropDownListFor(model => model.PaySlips.EarnerType, "Please select an Earner Type", new { @class = "form-control ddl-earnerType form-input-custom", style = "display:inline-block" })
                 </div>
                 <div class="col-md-12">
                     @Html.ValidationMessageFor(model => model.PaySlips.EarnerType, "", new { @class = "text-danger" })
