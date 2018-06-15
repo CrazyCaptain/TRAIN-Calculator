@@ -3,59 +3,87 @@
 
 <div class="container">
     <div class="row">
-        <div class="form-horizontal">
+        <div id="calculator-form-container" class="form-horizontal">
 
             <div class="form-group">
                 <div class="col-md-12">
-                    @Html.EnumDropDownListFor(model => model.PaySlips.EarnerType, "Earner Type", new { @class = "form-control ddl-earnerType", style = "display:inline-block" })
-                    <i class="fas fa-info-circle" style="display:inline-block;" data-toggle="tooltip" data-placement="right" title="Earner Type"></i>
+                    @Html.LabelFor(m => m.PaySlips.EarnerType)
+                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Earner Type"></i>
+                    <br />
+                    @Html.EnumDropDownListFor(model => model.PaySlips.EarnerType, "Earner Type", new { @class = "form-control ddl-earnerType form-input-custom", style = "display:inline-block" })
                 </div>
                 <div class="col-md-12">
                     @Html.ValidationMessageFor(model => model.PaySlips.EarnerType, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.EditorFor(model => model.PaySlips.TotalHoursWorked, new { htmlAttributes = new { @class = "form-control", placeholder = "Total Hours Worked" } })
-                    @Html.ValidationMessageFor(model => model.PaySlips.TotalHoursWorked, "", new { @class = "text-danger" })
-                </div>
-            </div>
 
             <div class="form-group">
-                <div class="col-md-12">
-                    @Html.EditorFor(model => model.PaySlips.ExpectedWorkedHours, new { htmlAttributes = new { @class = "form-control", placeholder = "Expected Worked Hours" } })
+                <div class="col-md-6">
+                    @Html.LabelFor(m => m.PaySlips.TotalHoursWorked)
+                    <br />
+                    <span class="form-control form-input-custom">
+                        <span style="border-right:1px solid #a9a9a9;color:#8c8c8c;display:inline-block;width:22%;">Hrs </span>
+                        @Html.EditorFor(model => model.PaySlips.TotalHoursWorked, new { htmlAttributes = new { @class = "form-blank-input", placeholder = "000", style = "width:70%;display:inline-block;" } })
+                    </span>
+                    @Html.ValidationMessageFor(model => model.PaySlips.TotalHoursWorked, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    @Html.LabelFor(m => m.PaySlips.ExpectedWorkedHours)
+                    <br />
+                    <span class="form-control form-input-custom">
+                        <span style="border-right:1px solid #a9a9a9;color:#8c8c8c;display:inline-block;width:22%;">Hrs </span>
+                        @Html.EditorFor(model => model.PaySlips.ExpectedWorkedHours, new { htmlAttributes = new { @class = "form-blank-input", placeholder = "000", style = "width:70%;display:inline-block;" } })
+                    </span>
                     @Html.ValidationMessageFor(model => model.PaySlips.ExpectedWorkedHours, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-md-12">
-                    @Html.EditorFor(model => model.PaySlips.OvertimeWorkedHours, new { htmlAttributes = new { @class = "form-control", placeholder = "Overtime Worked Hours" } })
+                <div class="col-md-6">
+                    @Html.LabelFor(m => m.PaySlips.OvertimeWorkedHours)
+                    <br />
+                    <span class="form-control form-input-custom">
+                        <span style="border-right:1px solid #a9a9a9;color:#8c8c8c;display:inline-block;width:22%;">Hrs </span>
+                        @Html.EditorFor(model => model.PaySlips.OvertimeWorkedHours, new { htmlAttributes = new { @class = "form-blank-input", placeholder = "000", style = "width:70%;display:inline-block;" } })
+                    </span>
                     @Html.ValidationMessageFor(model => model.PaySlips.OvertimeWorkedHours, "", new { @class = "text-danger" })
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.EditorFor(model => model.PaySlips.OvertimeRatePerHour, new { htmlAttributes = new { @class = "form-control", placeholder = "Overtime Rate Per Hour" } })
+                <div class="col-md-6">
+                    @Html.LabelFor(m => m.PaySlips.OvertimeRatePerHour)
+                    <br />
+                    <span class="form-control form-input-custom">
+                        <span style="border-right:1px solid #a9a9a9;color:#8c8c8c;display:inline-block;width:22%;">Php </span>
+                        @Html.EditorFor(model => model.PaySlips.OvertimeRatePerHour, new { htmlAttributes = new { @class = "form-blank-input", placeholder = "000", style = "width:70%;display:inline-block;" } })
+                    </span>
                     @Html.ValidationMessageFor(model => model.PaySlips.OvertimeRatePerHour, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-md-12">
-                    @Html.EditorFor(model => model.PaySlips.BasicSalary, new { htmlAttributes = new { @class = "form-control", placeholder = "Basic Salary" } })
+                    @Html.LabelFor(m => m.PaySlips.BasicSalary)
+                    <br />
+                    <span class="form-control form-input-custom">
+                        <span style="border-right:1px solid #a9a9a9;color:#8c8c8c;display:inline-block;width:22%;">Php </span>
+                        @Html.EditorFor(model => model.PaySlips.BasicSalary, new { htmlAttributes = new { @class = "form-blank-input", placeholder = "000", style = "width:70%;display:inline-block;" } })
+                    </span>
                     @Html.ValidationMessageFor(model => model.PaySlips.BasicSalary, "", new { @class = "text-danger" })
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-3 col-md-12">
-                    <input type="submit" value="Calculate" class="btn btn-primary" />
+            <div class="form-group" style="margin-top:20px;">
+                <div class="col-md-12">
+                    <input type="submit" value="Calculate" class="btn btn-default" style="width:100%;max-width:100%;background:#CFA700;color:#fff;" />
                 </div>
             </div>
 
         </div>
+    </div>
+
+    <div class="row">
+        <p style="word-break:keep-all">This calculator will be the basis for an upcoming <nobr>open-source</nobr> library called <span style="color:#CFA700">TRAIN Engine PH</span></p>
     </div>
 </div>
 

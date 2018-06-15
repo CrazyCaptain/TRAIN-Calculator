@@ -51,13 +51,15 @@
                         @Html.ValidationMessageFor(model => model.PaySlipCompensations.HolidayPay, "", new { @class = "text-danger" })
                     </dd>
 
-
-                    <dd class="col-md-offset-1 hide" id="ThirteenMonthPay" style="padding:2px;">
-                        @Html.DisplayNameFor(model => model.PaySlipCompensations.ThirteenMonthPay) <i class="fas fa-trash-alt btnRemove"></i>
-                        @Html.EditorFor(model => model.PaySlipCompensations.ThirteenMonthPay, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.PaySlipCompensations.ThirteenMonthPay, "", new { @class = "text-danger" })
-                    </dd>
-
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-offset-1">
+                    <h3>Deductions</h3>
+                </div>
+                <div class="col-md-offset-1">
+                    @Html.EnumDropDownListFor(model => model.PaySlipDeductions.Deductions, "Deductions", new { @class = "form-control DDL_DeductionList", data_toggle = "tooltip", data_placement = "right", title = "Add Deductions" })
+                </div>
 
                     @* De Minimis *@
 
@@ -131,8 +133,8 @@
                 </dl>
             </div>
 
-            <div class="col-md-6">
-                
+            @*<div class="col-md-4">
+            
                 <div class="col-md-offset-1">
                     <h3>Deductions</h3>
                 </div>
@@ -159,10 +161,7 @@
 
 
                 </dl>
-
-            </div>
-
-
+            </div>*@
 
         </div>
 
