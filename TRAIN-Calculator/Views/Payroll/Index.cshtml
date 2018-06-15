@@ -1,0 +1,64 @@
+﻿@model TRAIN_Calculator.ViewModels.PayrollViewModel
+
+<h2></h2>
+
+@using (Html.BeginForm("Calculate", "Payroll"))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4" id="calculate-partial-view">
+                @Html.Partial("_Calculate", Model)
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+    </div>
+}
+
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            DefaultValues();
+        });
+
+        $(document).on("change", ".ddl-earnerType", function () {
+            DefaultValues();
+     
+        });
+
+
+        function DefaultValues() {
+            var earnerType = $(".ddl-earnerType option:selected").text()
+
+            if (earnerType == "Monthly") {
+                $("#PaySlips_TotalHoursWorked").val(160);
+                $("#PaySlips_ExpectedWorkedHours").val(160);
+            }
+            else {
+                $("#PaySlips_TotalHoursWorked").val("");
+                $("#PaySlips_ExpectedWorkedHours").val("");
+                $("#PaySlips_BasicSalary").val("");
+            }
+
+        }
+
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+    </script>
+}
+
+
+
+

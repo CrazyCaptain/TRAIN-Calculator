@@ -1,0 +1,103 @@
+﻿@model TRAIN_Calculator.ViewModels.PayrollViewModel
+
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2></h2>
+@using (Html.BeginForm("Calculate", "Payroll"))
+{
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-4" id="calculate-partial-view">
+                @Html.Partial("_Calculate", Model)
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="row">
+                    <div class="col-md-12" id="results-partial-view">
+                        @Html.Partial("_AddParticulars", Model)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" id="results-partial-view">
+                        @Html.Partial("_Result", Model)
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+
+        $(document).ready(function () {
+            LoadParticulars();
+        });
+
+
+        $(document).on("click", ".btnRemove", function () {
+
+            $(this).closest('dd').addClass("hide");
+            $("." + $(this).closest("dd").attr("id") + "").val("0.00")
+
+            return false;
+
+        });
+
+        $(document).on("change", ".DDL_CompensationList, .DDL_DeductionList, .DDL_DeMinimis", function () {
+
+            var prop = $("option:selected", this).text().split(' ').join('');
+            $("#" + prop + "").removeClass("hide");
+            $(this).val("");
+            return false;
+
+        });
+
+
+   
+
+        function LoadParticulars() {
+
+            var ctr = $("dl.list-group").length;
+
+            for (var xRow = 0; xRow < ctr; xRow++) {
+                {
+                    var id = $(`dl.list-group:eq(${xRow})`).attr("id");
+
+                    var len = $(`dl#${id}.list-group dd input`).length;
+
+                    for (var row = 0; row < len; row++) {
+                        if ($(`dl#${id}.list-group dd input:eq(${row})`).val() != 0) {
+                            $(`dl#${id}.list-group dd:eq(${row})`).removeClass("hide")
+                        }
+                        
+                        if ($(`dl#${id}.list-group dd input:eq(${row})`).hasClass("input-validation-error") == true) {
+                            $(`dl#${id}.list-group dd:eq(${row})`).removeClass("hide")
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+    </script>
+}

@@ -1,0 +1,148 @@
+﻿@model TRAIN_Calculator.ViewModels.PayrollViewModel
+
+<head>
+    <style type="text/css">
+        table.borderless td, table.borderless th {
+            border: none !important;
+            padding-top: 3px !important;
+            padding-bottom: 2px !important;
+        }
+
+        .td-value {
+            text-align: right;
+        }
+    </style>
+
+
+</head>
+
+
+
+<div class="container">
+    <div class="row">
+
+
+        <div class="form-horizontal">
+
+
+            <div class="col-md-6">
+                <div style="border-bottom:solid;">
+                    <h3>Compensations</h3>
+                </div>
+                <table class="table borderless">
+                    <thead>
+                        <tr></tr>
+                        <tr></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Html.DisplayNameFor(model => model.PaySlipCompensations.OvertimePay)
+                            </td>
+                            <td class="td-value">
+                                @Model.PaySlipCompensations.OvertimePay.ToString("#,#0.00")
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-6">
+                <div style="border-bottom:solid;">
+                    <h3>Deductions</h3>
+                </div>
+                
+                <table class="table borderless">
+                    <thead>
+                        <tr></tr>
+                        <tr></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Html.DisplayNameFor(model => model.PaySlipDeductions.SSS)
+                            </td>
+                            <td class="td-value">
+                                @Model.PaySlipDeductions.SSS.ToString("#,#0.00")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayNameFor(model => model.PaySlipDeductions.PAGIBIG)
+                            </td>
+                            <td class="td-value">
+                                @Model.PaySlipDeductions.PAGIBIG.ToString("#,#0.00")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayNameFor(model => model.PaySlipDeductions.PHIC)
+                            </td>
+                            <td class="td-value">
+                                @Model.PaySlipDeductions.PHIC.ToString("#,#0.00")
+                            </td>
+                        </tr>
+                       
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <hr />
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+
+            <div style="text-align:center"><h3>Summary</h3></div>
+
+            <table class="table borderless" style="font-size:15px;">
+                <thead>
+                    <tr></tr>
+                    <tr></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total Compensation</td>
+                        <td class="td-value">@Model.PaySlips.TotalCompensations.ToString("#,#0.00")</td>
+                    </tr>
+
+                    <tr>
+                        <td>Total Deductions</td>
+                        <td class="td-value">@Model.PaySlips.TotalDeductions.ToString("#,#0.00")</td>
+                    </tr>
+                    <tr>
+                        <td>Taxable Income</td>
+                        <td class="td-value">@Model.PaySlips.TaxableIncome.ToString("#,#0.00")</td>
+                    </tr>
+                    <tr>
+                        <td>WithHolding Tax</td>
+                        <td class="td-value">@Model.PaySlips.WithHoldingTax.ToString("#,#0.00")</td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+
+      
+        </div>
+        <div class="col-md-3"></div>
+
+    </div>
+
+
+    <hr />
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div style="text-align:center"><h3>Take Home Pay</h3></div>
+            <div style="text-align:center"><h2>Php @Model.PaySlips.TakeHomePay.ToString("#,#0.00")</h2></div>
+
+        </div>
+        <div class="col-md-3"></div>
+
+    </div>
+
+</div>
