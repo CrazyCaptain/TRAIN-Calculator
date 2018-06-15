@@ -9,13 +9,14 @@ namespace TRAIN_Calculator.Models
     public class PaySlip
     {
         [Required]
+        [Display(Name = "Earner Type")]
         public EarnerType? EarnerType { get; set; }
 
         [Required]
         [Display(Name = "Total Hours Worked")]
         public int TotalHoursWorked { get; set; }
 
-        [Display(Name = "Expected Worked Hours")]
+        [Display(Name = "Expected Work Hours")]
         public int ExpectedWorkedHours { get; set; }
 
         
@@ -106,17 +107,21 @@ namespace TRAIN_Calculator.Models
 
     public enum Compensations
     {
-        Allowance,
-        HolidayPay,
-        ECOLA
+        OvertimePay = 1,
+        Allowance = 2,
+        HolidayPay = 3,
+        ECOLA = 4
     }
 
     public enum Deductions
     {
+        SSS = 1,
+        PAGIBIG = 2,
+        PHIC = 3,
         [Display(Name = "SSS Loan")]
-        SSSLoan,
+        SSSLoan = 4,
         [Display(Name = "PAGIBIG Loan")]
-        PAGIBIGLoan
+        PAGIBIGLoan = 5
     }
 
     public enum DeMinimis

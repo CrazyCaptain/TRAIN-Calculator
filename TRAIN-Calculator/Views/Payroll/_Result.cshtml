@@ -1,5 +1,5 @@
 ﻿@model TRAIN_Calculator.ViewModels.PayrollViewModel
-
+@using TRAIN_Calculator.Models
 <head>
     <style type="text/css">
         table.borderless td, table.borderless th {
@@ -19,129 +19,144 @@
 
 
 <div class="container">
+
+    <div class="row" style="margin-top:20px;">
+        <p style="text-align:center;">
+            <i>Reminder: As the moment, this calculator is used for private and government entities.</i>
+        </p>
+        <hr />
+    </div>
+
     <div class="row">
 
-
-        <div class="form-horizontal">
-
-
-            <div class="col-md-6">
-                <div style="border-bottom:solid;">
-                    <h3>Compensations</h3>
+        <div class="col-md-6">
+            <div class="container">
+                <div class="row text-center">
+                    <h4 style="text-align:center;font-size:2em;font-weight:bold;display:inline">
+                        <span>Compensation</span>
+                    </h4>
+                    <div class="button-dropdown-custom">
+                        <button type="button" class="form-blank-input button-dropdown-custom">
+                            <span class="glyphicon glyphicon-plus-sign" style="color:#CFA700;font-size:2em"></span>
+                        </button>
+                        <div class="button-dropdown-custom-content" style="right:0px;">
+                        @foreach (var item in Enum.GetValues(typeof(TRAIN_Calculator.Models.Compensations)))
+                        {
+                            <a class="button-dropdown-custom-item" data-value="@((int)item)" data-text="@item" onclick="addCompensation(this)">@item</a>
+                        }
+                        </div>
+                    </div>
                 </div>
-                <table class="table borderless">
-                    <thead>
-                        <tr></tr>
-                        <tr></tr>
-                    </thead>
+
+                <table id="compensations-table" class="table borderless table-custom-calculator">
                     <tbody>
+                    @for (int i = 0; i < Model.Compensations.Count; i++)
+                    { 
+                        var item = Model.Compensations[i];
                         <tr>
                             <td>
-                                @Html.DisplayNameFor(model => model.PaySlipCompensations.OvertimePay)
+                                <input class="compensations-table-item-key" type="hidden" name="Compensations[@i].Compensation" value="@((int)item.Compensation)" />
+                                <button type="button" class="form-blank-input" onclick="removeCalculatorTableItem(this)">
+                                    <span class="glyphicon glyphicon-minus-sign"></span>
+                                </button>
+                                @item.Compensation
                             </td>
                             <td class="td-value">
-                                @Model.PaySlipCompensations.OvertimePay.ToString("#,#0.00")
+                                <input class="compensations-table-item-value" type="number" name="Compensations[@i].Value" value="@item.Value.ToString("#0.00")" />
                             </td>
                         </tr>
+                    }
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div class="col-md-6">
-                <div style="border-bottom:solid;">
-                    <h3>Deductions</h3>
+        <div class="col-md-6">
+            <div class="container">
+                <div class="row text-center">
+                    <h4 style="text-align:center;font-size:2em;font-weight:bold;display:inline">
+                        <span>Deduction</span>
+                    </h4>
+                    <div class="button-dropdown-custom">
+                        <button type="button" class="form-blank-input button-dropdown-custom">
+                            <span class="glyphicon glyphicon-plus-sign" style="color:#CFA700;font-size:2em"></span>
+                        </button>
+                        <div class="button-dropdown-custom-content" style="right:0px;">
+                            @foreach (var item in Enum.GetValues(typeof(TRAIN_Calculator.Models.Deductions)))
+                            {
+                                <a class="button-dropdown-custom-item" data-value="@((int)item)" data-text="@item" onclick="addDeduction(this)">@item</a>
+                            }
+                        </div>
+                    </div>
                 </div>
-                
-                <table class="table borderless">
-                    <thead>
-                        <tr></tr>
-                        <tr></tr>
-                    </thead>
+
+                <table id="deductions-table" class="table borderless table-custom-calculator">
                     <tbody>
+                    @for (int i = 0; i < Model.Deductions.Count; i++)
+                    {
+                        var item = Model.Deductions[i];
                         <tr>
                             <td>
-                                @Html.DisplayNameFor(model => model.PaySlipDeductions.SSS)
+                                <input class="deductions-table-item-key" type="hidden" name="Deduction[@i].Deduction" value="@((int)item.Deduction)" />
+                                <button type="button" class="form-blank-input" onclick="removeCalculatorTableItem(this)">
+                                    <span class="glyphicon glyphicon-minus-sign"></span>
+                                </button>
+                                @item.Deduction
                             </td>
                             <td class="td-value">
-                                @Model.PaySlipDeductions.SSS.ToString("#,#0.00")
+                                <input class="deductions-table-item-value" type="number" name="Deduction[@i].Value" value="@item.Value.ToString("#0.00")" />
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                @Html.DisplayNameFor(model => model.PaySlipDeductions.PAGIBIG)
-                            </td>
-                            <td class="td-value">
-                                @Model.PaySlipDeductions.PAGIBIG.ToString("#,#0.00")
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                @Html.DisplayNameFor(model => model.PaySlipDeductions.PHIC)
-                            </td>
-                            <td class="td-value">
-                                @Model.PaySlipDeductions.PHIC.ToString("#,#0.00")
-                            </td>
-                        </tr>
-                       
+                    }
                     </tbody>
                 </table>
-
             </div>
         </div>
-    </div>
-
-
-
-    <hr />
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-
-            <div style="text-align:center"><h3>Summary</h3></div>
-
-            <table class="table borderless" style="font-size:15px;">
-                <thead>
-                    <tr></tr>
-                    <tr></tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Total Compensation</td>
-                        <td class="td-value">@Model.PaySlips.TotalCompensations.ToString("#,#0.00")</td>
-                    </tr>
-
-                    <tr>
-                        <td>Total Deductions</td>
-                        <td class="td-value">@Model.PaySlips.TotalDeductions.ToString("#,#0.00")</td>
-                    </tr>
-                    <tr>
-                        <td>Taxable Income</td>
-                        <td class="td-value">@Model.PaySlips.TaxableIncome.ToString("#,#0.00")</td>
-                    </tr>
-                    <tr>
-                        <td>WithHolding Tax</td>
-                        <td class="td-value">@Model.PaySlips.WithHoldingTax.ToString("#,#0.00")</td>
-                    </tr>
-                   
-                </tbody>
-            </table>
-
-      
-        </div>
-        <div class="col-md-3"></div>
 
     </div>
 
-
-    <hr />
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-            <div style="text-align:center"><h3>Take Home Pay</h3></div>
-            <div style="text-align:center"><h2>Php @Model.PaySlips.TakeHomePay.ToString("#,#0.00")</h2></div>
 
+        <hr />
+
+        <div class="col-md-8 col-md-offset-2">
+
+            <div class="container">
+                <div class="row">
+                    <h4 style="text-align:center;font-size:2em;font-weight:bold;">Summary</h4>
+                </div>
+
+                <div class="row">
+
+                    <table class="table borderless table-custom-calculator">
+                        <tbody>
+                            <tr>
+                                <td>Taxable Income</td>
+                                <td class="td-value">@Model.PaySlips.TaxableIncome.ToString("#,#0.00")</td>
+                            </tr>
+                            <tr>
+                                <td>WithHolding Tax</td>
+                                <td class="td-value">@Model.PaySlips.WithHoldingTax.ToString("#,#0.00")</td>
+                            </tr>
+                            <tr>
+                                <td>Total Compensation</td>
+                                <td class="td-value">@Model.PaySlips.TotalCompensations.ToString("#,#0.00")</td>
+                            </tr>
+
+                            <tr>
+                                <td>Total Deductions</td>
+                                <td class="td-value">@Model.PaySlips.TotalDeductions.ToString("#,#0.00")</td>
+                            </tr>
+                            <tr>
+                                <td>Take Home Pay</td>
+                                <td class="td-value">@Model.PaySlips.TakeHomePay.ToString("#,#0.00")</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
         </div>
-        <div class="col-md-3"></div>
 
     </div>
 

@@ -21,9 +21,8 @@ namespace TRAIN_Calculator.Controllers
             var model = new PayrollViewModel()
             {
                 PaySlips = new PaySlip(),
-                PaySlipCompensations = new PaySlipCompensation(),
-                PaySlipDeductions = new PaySlipDeduction(),
-                PaySlipDeMinimis = new PaySlipDeMinimis()
+                Compensations = new List<PayrollCompensationViewModel>(),
+                Deductions = new List<PayrollDeductionViewModel>()
             };
 
             return View(model);
@@ -31,65 +30,58 @@ namespace TRAIN_Calculator.Controllers
 
 
         [HttpPost]
-        public ActionResult Calculate(PayrollViewModel payroll)
+        public ActionResult Calculate(PayrollViewModel model)
         {
-            var pSlip = payroll.PaySlips;
-            var cList = payroll.PaySlipCompensations;
-            var dList = payroll.PaySlipDeductions;
-            var dmList = payroll.PaySlipDeMinimis;
+            model.PaySlips = model.PaySlips;
+            model.Compensations = model.Compensations ?? new List<PayrollCompensationViewModel>();
+            model.Deductions = model.Deductions ?? new List<PayrollDeductionViewModel>();
 
+
+            if (!(model.PaySlips.BasicSalary > 0) || !(model.PaySlips.ExpectedWorkedHours > 0) || !(model.PaySlips.TotalHoursWorked > 0))
+            {
+                return View("Index", model);
+            }
 
             if (!ModelState.IsValid)
             {
-                if (pSlip.BasicSalary != 0)
-                    return View("Details", payroll);
+                if (model.PaySlips.BasicSalary != 0)
+                    return View("Details", model);
                 else
-                    return View("Index", payroll);
+                    return View("Index", model);
             }
             
+            var BasicPay = ComputeExpectedPay(model.PaySlips.BasicSalary, model.PaySlips.TotalHoursWorked, model.PaySlips.ExpectedWorkedHours);
 
-
-            
-            var BasicPay = ComputeExpectedPay(pSlip.BasicSalary, pSlip.TotalHoursWorked, pSlip.ExpectedWorkedHours);
-            
-            var CompensationList = new PaySlipCompensation()
+            // Add Overtime if applicable
+            var overtimePay = ComputeOvertimePay(model.PaySlips.OvertimeWorkedHours == null ? 0 : (int)model.PaySlips.OvertimeWorkedHours, model.PaySlips.OvertimeRatePerHour == null ? 0 : (decimal)model.PaySlips.OvertimeRatePerHour);
+            List<PayrollCompensationViewModel> compensationsList = model.Compensations ?? new List<PayrollCompensationViewModel>();
+            if (!compensationsList.Any(m => m.Compensation == Compensations.OvertimePay) && overtimePay > 0)
             {
-                OvertimePay = ComputeOvertimePay(pSlip.OvertimeWorkedHours == null ? 0 : (int)pSlip.OvertimeWorkedHours, pSlip.OvertimeRatePerHour == null ? 0 : (decimal)pSlip.OvertimeRatePerHour),
-                Allowance = cList == null ? 0 : cList.Allowance,
-                ECOLA = cList == null ? 0 : cList.ECOLA,
-                HolidayPay = cList == null ? 0 : cList.HolidayPay
-            };
+                compensationsList.Add(new PayrollCompensationViewModel() { Compensation = Compensations.OvertimePay, Value = overtimePay });
+            }
 
-            var DeductionList = new PaySlipDeduction()
+            // Add SSS if not already in list
+            List<PayrollDeductionViewModel> deductionsList = model.Deductions ?? new List<PayrollDeductionViewModel>();
+            if (!deductionsList.Any(m => m.Deduction == Deductions.SSS))
             {
-                SSS = ComputeSSS(BasicPay),
-                PHIC = ComputePHIC(BasicPay),
-                PAGIBIG = ComputePAGIBIG(BasicPay),
-                SSSLoan = dList == null ? 0 : dList.SSSLoan,
-                PAGIBIGLoan = dList == null ? 0 : dList.PAGIBIGLoan
-            };
-
-
-            var DeminimisList = new PaySlipDeMinimis()
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = Deductions.SSS, Value = ComputeSSS(BasicPay) });
+            }
+            // Add PHIC if not already in list
+            if (!deductionsList.Any(m => m.Deduction == Deductions.PHIC))
             {
-                RiceAllowance = dmList == null ? 0 : dmList.RiceAllowance,
-                LaundryAllowance = dmList == null ? 0 : dmList.LaundryAllowance
-
-            };
-
-            pSlip.TotalDeductions = ComputeTotalDeductions(DeductionList);
-            pSlip.TotalCompensations = ComputeTotalCompensations(CompensationList, BasicPay);
-            pSlip.TaxableIncome = ComputeTaxableIncome(BasicPay + CompensationList.OvertimePay, DeductionList.SSS, DeductionList.PHIC, DeductionList.PAGIBIG);
-            pSlip.WithHoldingTax = ComputeTax(pSlip.TaxableIncome);
-            pSlip.TakeHomePay = ComputeTakeHomePay(pSlip.TotalCompensations, pSlip.TotalDeductions, pSlip.WithHoldingTax);
-            
-            var model = new PayrollViewModel()
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = Deductions.PHIC, Value = ComputePHIC(BasicPay) });
+            }
+            // Add PAGIBIG if not already in list
+            if (!deductionsList.Any(m => m.Deduction == Deductions.PAGIBIG))
             {
-                PaySlips = pSlip,
-                PaySlipCompensations = CompensationList,
-                PaySlipDeductions = DeductionList,
-                PaySlipDeMinimis = DeminimisList
-            };
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = Deductions.PAGIBIG, Value = ComputePAGIBIG(BasicPay) });
+            }
+
+            model.PaySlips.TotalDeductions = model.Deductions.Sum(m => m.Value);
+            model.PaySlips.TotalCompensations = model.Compensations.Sum(m => m.Value) + BasicPay;
+            model.PaySlips.TaxableIncome = ComputeTaxableIncome(BasicPay + overtimePay, model.Deductions.Select(m => m.Value).ToArray());
+            model.PaySlips.WithHoldingTax = ComputeTax(model.PaySlips.TaxableIncome);
+            model.PaySlips.TakeHomePay = ComputeTakeHomePay(model.PaySlips.TotalCompensations, model.PaySlips.TotalDeductions, model.PaySlips.WithHoldingTax);
 
             return View("Details", model); ;
         }
@@ -169,6 +161,14 @@ namespace TRAIN_Calculator.Controllers
 
             return TaxableIncome;
         }
+        public decimal ComputeTaxableIncome(decimal BasicPay, decimal[] deductibles)
+        {
+            decimal TaxableIncome = 0;
+
+            TaxableIncome = BasicPay - (deductibles.Sum());
+
+            return TaxableIncome;
+        }
 
         public decimal ComputeTax(decimal TaxableIncome)
         {
@@ -241,6 +241,14 @@ namespace TRAIN_Calculator.Controllers
 
             return Total;
         }
+        //public decimal ComputeTotalDeductions(List<PayrollDeductionViewModel> deductionViewmodelList)
+        //{
+        //    decimal Total = 0;
+
+        //    Total = model.SSS + model.PAGIBIG + model.SSS + model.SSSLoan + model.PAGIBIGLoan;
+
+        //    return Total;
+        //}
 
         public decimal ComputeTotalCompensations(PaySlipCompensation model, decimal BasicPay)
         {

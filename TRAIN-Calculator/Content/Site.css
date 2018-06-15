@@ -1,10 +1,25 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿html, body, .body-content {
+    height:100%;
+    min-height:100%;
+}
+
+/* Override */
+
+.navbar {
+    margin-bottom:0px;
+    background:#CFA700;
+    color:#fff;
+    border-bottom:1px solid #b7a43c;
+}
+
+.navbar-nav > li > a {
+    color:#fff !important;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
+    margin-top:-51px;
+    padding-top:70px;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -21,4 +36,95 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+/* Custom */
+
+#calculator-form hr {
+    border-bottom-color:#999;
+}
+
+.form-blank-input {
+    background:none;
+    border:none;
+    outline:none;
+    display:inline;
+}
+
+.form-input-custom {
+    background:#F4F4F4;
+    border:none;
+    color:#000;
+    border-radius:4px;
+    box-shadow:none;
+    border:1px solid #ededed;
+    outline:none;
+    max-width:100%;
+}
+
+.button-dropdown-custom {
+    position: relative;
+    display: inline-block;
+}
+.button-dropdown-custom:hover .button-dropdown-custom-content {
+    display:block;
+}
+
+.button-dropdown-custom-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.button-dropdown-custom-content a {
+    color:#000;
+    cursor:pointer;
+    padding:12px 16px;
+    text-decoration:none;
+    display:block;
+}
+.button-dropdown-custom-content a:hover {
+    color:#999;
+    background:#fafafa;
+}
+
+#calculator-form-container, label {
+    font-size:0.95em;
+}
+
+.table-custom-calculator tr > td:first-child {
+    font-weight:bold;
+}
+.table-custom-calculator tr:last-child {
+    border-bottom:none;
+}
+.table-custom-calculator tr {
+    border-bottom:1px solid #ededed;
+}
+
+.table-custom-calculator .glyphicon-minus-sign {
+    color:red;
+    cursor:pointer;
+}
+
+.table-custom-calculator td:last-child {
+    text-align:right;
+}
+
+.table-custom-calculator input{
+    max-width:100px;
+}
+
+.deductions-table-item-value {
+    text-align:right !important;
+    border:none !important;
+    outline:none;
+}
+.compensations-table-item-value {
+    text-align:right !important;
+    border:none !important;
+    outline:none;
 }

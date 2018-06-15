@@ -9,11 +9,20 @@ namespace TRAIN_Calculator.ViewModels
     public class PayrollViewModel
     {
         public PaySlip PaySlips { get; set; }
-        public PaySlipCompensation PaySlipCompensations { get; set; }
-        public PaySlipDeduction PaySlipDeductions { get; set; }
-        public PaySlipDeMinimis PaySlipDeMinimis { get; set; }
-
+        public List<PayrollCompensationViewModel> Compensations { get; set; }
+        public List<PayrollDeductionViewModel> Deductions { get; set; }
     }
 
-    
+    public class PayrollCompensationViewModel
+    {
+        public Compensations Compensation { get; set; }
+        public decimal Value { get; set; }
+    }
+
+    public class PayrollDeductionViewModel
+    {
+        public Deductions Deduction { get; set; }
+        public decimal Value { get; set; }
+    }
+
 }
