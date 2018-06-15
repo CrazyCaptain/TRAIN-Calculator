@@ -1,0 +1,282 @@
+﻿[
+  {
+    "SalaryFrom": 1000,
+    "SalaryTo": 1250,
+    "MSC": 1000,
+    "SS_ER": 73.7,
+    "SS_EE": 36.3,
+    "TC_ER": 83.7,
+    "TC_EE": 36.3
+  },
+  {
+    "SalaryFrom": 1250,
+    "SalaryTo": 1750,
+    "MSC": 1500,
+    "SS_ER": 110.5,
+    "SS_EE": 54.5,
+    "TC_ER": 120.5,
+    "TC_EE": 54.5
+  },
+  {    
+    "SalaryFrom": 1750,
+    "SalaryTo": 2250,
+    "MSC": 2000,
+    "SS_ER": 147.3,
+    "SS_EE": 72.7,
+    "TC_ER": 157.3,
+    "TC_EE": 72.7
+  },
+  {    
+    "SalaryFrom": 2250,
+    "SalaryTo": 2750,
+    "MSC": 2500,
+    "SS_ER": 184.2,
+    "SS_EE": 90.8,
+    "TC_ER": 194.2,
+    "TC_EE": 90.8
+  },
+  {
+    "SalaryFrom": 2750,
+    "SalaryTo": 3250,
+    "MSC": 3000,
+    "SS_ER": 221,
+    "SS_EE": 109,
+    "TC_ER": 231,
+    "TC_EE": 109
+  },
+  {
+    "SalaryFrom": 3250,
+    "SalaryTo": 3750,
+    "MSC": 3500,
+    "SS_ER": 257.8,
+    "SS_EE": 127.2,
+    "TC_ER": 267.8,
+    "TC_EE": 127.2
+  },
+  {
+    "SalaryFrom": 3750,
+    "SalaryTo": 4250,
+    "MSC": 4000,
+    "SS_ER": 294.7,
+    "SS_EE": 145.3,
+    "TC_ER": 304.7,
+    "TC_EE": 145.3
+  },
+  {    
+    "SalaryFrom": 4250,
+    "SalaryTo": 4750,
+    "MSC": 4500,
+    "SS_ER": 331.5,
+    "SS_EE": 163.5,
+    "TC_ER": 341.5,
+    "TC_EE": 163.5
+  },
+  {
+    "SalaryFrom": 4750,
+    "SalaryTo": 5250,
+    "MSC": 5000,
+    "SS_ER": 368.3,
+    "SS_EE": 181.7,
+    "TC_ER": 378.3,
+    "TC_EE": 181.7
+  },
+  {
+    "SalaryFrom": 5250,
+    "SalaryTo": 5750,
+    "MSC": 5500,
+    "SS_ER": 405.2,
+    "SS_EE": 199.8,
+    "TC_ER": 415.2,
+    "TC_EE": 199.8
+  },
+  {
+    "SalaryFrom": 5750,
+    "SalaryTo": 6250,
+    "MSC": 6000,
+    "SS_ER": 442,
+    "SS_EE": 218,
+    "TC_ER": 452,
+    "TC_EE": 218
+  },
+  {
+    "SalaryFrom": 6250,
+    "SalaryTo": 6750,
+    "MSC": 6500,
+    "SS_ER": 478.8,
+    "SS_EE": 236.2,
+    "TC_ER": 488.8,
+    "TC_EE": 236.2
+  },
+  { 
+    "SalaryFrom": 6750,
+    "SalaryTo": 7250,
+    "MSC": 7000,
+    "SS_ER": 515.7,
+    "SS_EE": 254.3,
+    "TC_ER": 525.7,
+    "TC_EE": 254.3
+  },
+  {
+    "SalaryFrom": 7250,
+    "SalaryTo": 7750,
+    "MSC": 7500,
+    "SS_ER": 552.5,
+    "SS_EE": 272.5,
+    "TC_ER": 562.5,
+    "TC_EE": 272.5
+  },
+  {
+    "SalaryFrom": 7750,
+    "SalaryTo": 8250,
+    "MSC": 8000,
+    "SS_ER": 589.3,
+    "SS_EE": 290.7,
+    "TC_ER": 599.3,
+    "TC_EE": 290.7
+  },
+  {
+    "SalaryFrom": 8250,
+    "SalaryTo": 8750,
+    "MSC": 8500,
+    "SS_ER": 626.2,
+    "SS_EE": 308.8,
+    "TC_ER": 636.2,
+    "TC_EE": 308.8
+  },
+  {
+    "SalaryFrom": 8750,
+    "SalaryTo": 9250,
+    "MSC": 9000,
+    "SS_ER": 663,
+    "SS_EE": 327,
+    "TC_ER": 673,
+    "TC_EE": 327
+  },
+  {
+    "SalaryFrom": 9250,
+    "SalaryTo": 9750,
+    "MSC": 9500,
+    "SS_ER": 699.8,
+    "SS_EE": 345.2,
+    "TC_ER": 709.8,
+    "TC_EE": 345.2
+  },
+  {
+    "SalaryFrom": 9750,
+    "SalaryTo": 10250,
+    "MSC": 10000,
+    "SS_ER": 736.7,
+    "SS_EE": 363.3,
+    "TC_ER": 746.7,
+    "TC_EE": 363.3
+  },
+  {
+    "SalaryFrom": 10250,
+    "SalaryTo": 10750,
+    "MSC": 10500,
+    "SS_ER": 773.5,
+    "SS_EE": 381.5,
+    "TC_ER": 783.5,
+    "TC_EE": 381.5
+  },
+  {
+    "SalaryFrom": 10750,
+    "SalaryTo": 11250,
+    "MSC": 11000,
+    "SS_ER": 810.3,
+    "SS_EE": 399.7,
+    "TC_ER": 820.3,
+    "TC_EE": 399.7
+  },
+  {
+    "SalaryFrom": 11250,
+    "SalaryTo": 11750,
+    "MSC": 11500,
+    "SS_ER": 847.2,
+    "SS_EE": 417.8,
+    "TC_ER": 857.2,
+    "TC_EE": 417.8
+  },
+  {
+    "SalaryFrom": 11750,
+    "SalaryTo": 12250,
+    "MSC": 12000,
+    "SS_ER": 884,
+    "SS_EE": 436,
+    "TC_ER": 894,
+    "TC_EE": 436
+  },
+  {
+    "SalaryFrom": 12250,
+    "SalaryTo": 12750,
+    "MSC": 12500,
+    "SS_ER": 920.8,
+    "SS_EE": 454.2,
+    "TC_ER": 930.8,
+    "TC_EE": 454.2
+  },
+  {
+    "SalaryFrom": 12750,
+    "SalaryTo": 13250,
+    "MSC": 13000,
+    "SS_ER": 957.7,
+    "SS_EE": 472.3,
+    "TC_ER": 967.7,
+    "TC_EE": 472.3
+  },
+  {
+    "SalaryFrom": 13250,
+    "SalaryTo": 13750,
+    "MSC": 13500,
+    "SS_ER": 994.5,
+    "SS_EE": 490.5,
+    "TC_ER": 1004.5,
+    "TC_EE": 490.5
+  },
+  {
+    "SalaryFrom": 13750,
+    "SalaryTo": 14250,
+    "MSC": 14000,
+    "SS_ER": 1031.3,
+    "SS_EE": 508.7,
+    "TC_ER": 1041.3,
+    "TC_EE": 508.7
+  },
+  {
+    "SalaryFrom": 14250,
+    "SalaryTo": 14750,
+    "MSC": 14500,
+    "SS_ER": 1068.2,
+    "SS_EE": 526.8,
+    "TC_ER": 1078.2,
+    "TC_EE": 526.8
+  },
+  {
+    "SalaryFrom": 14750,
+    "SalaryTo": 15250,
+    "MSC": 15000,
+    "SS_ER": 1105,
+    "SS_EE": 545,
+    "TC_ER": 1135,
+    "TC_EE": 545
+  },
+  {
+    "SalaryFrom": 15250,
+    "SalaryTo": 15750,
+    "MSC": 15500,
+    "SS_ER": 1141.8,
+    "SS_EE": 563.2,
+    "TC_ER": 1171.8,
+    "TC_EE": 563.2
+  },
+  {
+    "SalaryFrom": 15750,
+    "SalaryTo": 16250,
+    "MSC": 16000,
+    "SS_ER": 1178.7,
+    "SS_EE": 581.3,
+    "TC_ER": 1208.7,
+    "TC_EE": 581.3
+  }
+]
+
