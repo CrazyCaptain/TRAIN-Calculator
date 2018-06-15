@@ -26,9 +26,7 @@
 
 
             <div class="col-md-6">
-                <div style="border-bottom:solid;">
-                    <h3>Compensations</h3>
-                </div>
+       
                 <table class="table borderless">
                     <thead>
                         <tr></tr>
@@ -48,9 +46,7 @@
             </div>
 
             <div class="col-md-6">
-                <div style="border-bottom:solid;">
-                    <h3>Deductions</h3>
-                </div>
+   
                 
                 <table class="table borderless">
                     <thead>
@@ -114,6 +110,12 @@
                         <td>Total Deductions</td>
                         <td class="td-value">@Model.PaySlips.TotalDeductions.ToString("#,#0.00")</td>
                     </tr>
+
+                    <tr>
+                        <td>De Minimis</td>
+                        <td class="td-value">@Model.PaySlips.TotalDeMinimis.ToString("#,#0.00")</td>
+                    </tr>
+
                     <tr>
                         <td>Taxable Income</td>
                         <td class="td-value">@Model.PaySlips.TaxableIncome.ToString("#,#0.00")</td>

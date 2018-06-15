@@ -56,8 +56,10 @@
         $(document).on("click", ".btnRemove", function () {
 
             $(this).closest('dd').addClass("hide");
-            $("." + $(this).closest("dd").attr("id") + "").val("0.00")
+            $("#" + $(this).closest("dd").attr("id") + " input").val("0.00")
+            $("#" + $(this).closest("dd").attr("id") + " input").removeClass("input-validation-error");
 
+            
             return false;
 
         });

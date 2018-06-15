@@ -46,18 +46,16 @@ namespace TRAIN_Calculator.Controllers
                 else
                     return View("Index", payroll);
             }
-            
 
-
-            
             var BasicPay = ComputeExpectedPay(pSlip.BasicSalary, pSlip.TotalHoursWorked, pSlip.ExpectedWorkedHours);
-            
+
             var CompensationList = new PaySlipCompensation()
             {
                 OvertimePay = ComputeOvertimePay(pSlip.OvertimeWorkedHours == null ? 0 : (int)pSlip.OvertimeWorkedHours, pSlip.OvertimeRatePerHour == null ? 0 : (decimal)pSlip.OvertimeRatePerHour),
                 Allowance = cList == null ? 0 : cList.Allowance,
                 ECOLA = cList == null ? 0 : cList.ECOLA,
-                HolidayPay = cList == null ? 0 : cList.HolidayPay
+                HolidayPay = cList == null ? 0 : cList.HolidayPay,
+                ThirteenMonthPay = cList == null ? 0 : cList.ThirteenMonthPay
             };
 
             var DeductionList = new PaySlipDeduction()
@@ -72,17 +70,28 @@ namespace TRAIN_Calculator.Controllers
 
             var DeminimisList = new PaySlipDeMinimis()
             {
-                RiceAllowance = dmList == null ? 0 : dmList.RiceAllowance,
-                LaundryAllowance = dmList == null ? 0 : dmList.LaundryAllowance
+                UnusedVacationLeave = dmList == null ? 0 : dmList.UnusedVacationLeave,
+                VacationandSickLeaveCredits = dmList == null ? 0 : dmList.VacationandSickLeaveCredits,
+                MedicalAllowancetoEmployeeDependents = dmList == null ? 0 : dmList.MedicalAllowancetoEmployeeDependents,
+                RiceSubsidy = dmList == null ? 0 : dmList.RiceSubsidy,
+                UniformandClothing = dmList == null ? 0 : dmList.UniformandClothing,
+                MedicalExpenses = dmList == null ? 0 : dmList.MedicalExpenses,
+                LaundryAllowance = dmList == null ? 0 : dmList.LaundryAllowance,
+                AchievementAwards = dmList == null ? 0 : dmList.AchievementAwards,
+                ChristmasGifts = dmList == null ? 0 : dmList.ChristmasGifts,
+                DailyMealAllowance = dmList == null ? 0 : dmList.DailyMealAllowance,
+                CollectiveBargainingAgreement = dmList == null ? 0 : dmList.CollectiveBargainingAgreement
 
             };
 
             pSlip.TotalDeductions = ComputeTotalDeductions(DeductionList);
-            pSlip.TotalCompensations = ComputeTotalCompensations(CompensationList, BasicPay);
-            pSlip.TaxableIncome = ComputeTaxableIncome(BasicPay + CompensationList.OvertimePay, DeductionList.SSS, DeductionList.PHIC, DeductionList.PAGIBIG);
+            pSlip.TotalDeMinimis = ComputeTotalDeMinimis(DeminimisList);
+            pSlip.TotalCompensations = ComputeTotalCompensations(CompensationList, BasicPay + pSlip.TotalDeMinimis);
+
+            pSlip.TaxableIncome = ComputeTaxableIncome(BasicPay + CompensationList.OvertimePay + CompensationList.Allowance, DeductionList.SSS, DeductionList.PHIC, DeductionList.PAGIBIG);
             pSlip.WithHoldingTax = ComputeTax(pSlip.TaxableIncome);
             pSlip.TakeHomePay = ComputeTakeHomePay(pSlip.TotalCompensations, pSlip.TotalDeductions, pSlip.WithHoldingTax);
-            
+
             var model = new PayrollViewModel()
             {
                 PaySlips = pSlip,
@@ -109,7 +118,7 @@ namespace TRAIN_Calculator.Controllers
             JavaScriptSerializer ser = new JavaScriptSerializer();
             var SSSTable = ser.Deserialize<List<SSSTable>>(Json);
 
-            foreach(var data in SSSTable)
+            foreach (var data in SSSTable)
             {
                 if (BasicPay >= data.SalaryFrom && BasicPay < data.SalaryTo)
                 {
@@ -127,7 +136,7 @@ namespace TRAIN_Calculator.Controllers
         public decimal ComputePHIC(decimal BasicPay)
         {
             decimal PHIC = 0;
-            
+
             if (BasicPay < 40000)
             {
                 PHIC = (BasicPay * 0.0275M) / 2;
@@ -173,7 +182,7 @@ namespace TRAIN_Calculator.Controllers
         public decimal ComputeTax(decimal TaxableIncome)
         {
             decimal TAX = 0;
-         
+
             if (TaxableIncome <= 20833)
             {
                 TAX = 0;
@@ -212,7 +221,7 @@ namespace TRAIN_Calculator.Controllers
                 ExpectedPay = (THW / EWH) * BasicPay;
             }
 
-            return ExpectedPay;                
+            return ExpectedPay;
         }
 
         public decimal ComputeOvertimePay(decimal OTWH, decimal OTRPH)
@@ -242,6 +251,26 @@ namespace TRAIN_Calculator.Controllers
             return Total;
         }
 
+        public decimal ComputeTotalDeMinimis(PaySlipDeMinimis model)
+        {
+            decimal Total = 0;
+
+            Total = model.UnusedVacationLeave +
+                    model.VacationandSickLeaveCredits +
+                    model.MedicalAllowancetoEmployeeDependents +
+                    model.RiceSubsidy +
+                    model.UniformandClothing +
+                    model.MedicalExpenses +
+                    model.LaundryAllowance +
+                    model.AchievementAwards +
+                    model.ChristmasGifts +
+                    model.DailyMealAllowance +
+                    model.CollectiveBargainingAgreement;
+
+            return Total;
+        }
+
+
         public decimal ComputeTotalCompensations(PaySlipCompensation model, decimal BasicPay)
         {
             decimal Total = 0;
@@ -257,5 +286,143 @@ namespace TRAIN_Calculator.Controllers
 
 
 
+    public class IComputeExcessDeMinimis
+    {
+        public decimal ComputeUnusedVacationLeave(decimal BasicPay, int EWH, decimal value)
+        {
+            decimal ExcessValue = 0;
+            decimal MaxVacationLeavePay = (80 / EWH) * BasicPay;
 
+            if (value > MaxVacationLeavePay)
+            {
+                ExcessValue = value - MaxVacationLeavePay;
+            }
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeMedicalAllowance(int value)
+        {
+            decimal ExcessValue = 0;
+
+            if (value > 250)
+            {
+                ExcessValue = value - 250;
+            }
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeRiceSubsidy(decimal value)
+        {
+            decimal ExcessValue = 0;
+
+            if (value > 2000)
+            {
+                ExcessValue = value - 2000;
+            }
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeUniformAndClothing(decimal value)
+        {
+            decimal ExcessValue = 0;
+            decimal AnnualUniformAllowance = 6000;
+            decimal MonthlyUniformAllowance = 0;
+
+            MonthlyUniformAllowance = AnnualUniformAllowance / 12;
+
+            if (value > MonthlyUniformAllowance)
+            {
+                ExcessValue = value - MonthlyUniformAllowance;
+            }
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeMedicalExpenses(decimal value)
+        {
+            decimal ExcessValue = 0;
+            decimal AnnualMedicalAllowance = 10000;
+            decimal MonthlyMedicalAllowance = 0;
+
+            MonthlyMedicalAllowance = AnnualMedicalAllowance / 12;
+
+            if (value > MonthlyMedicalAllowance)
+            {
+                ExcessValue = value - MonthlyMedicalAllowance;
+            }
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeLaundryAllowance(decimal value)
+        {
+            decimal ExcessValue = 0;
+
+            if (value > 300)
+            {
+                ExcessValue = value - 300;
+            }
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeAchievementAwards(decimal value)
+        {
+            decimal ExcessValue = 0;
+            decimal AnnualAchievementAwards = 10000;
+            decimal MonthlyAchievementAwards = 0;
+
+            MonthlyAchievementAwards = AnnualAchievementAwards / 12;
+
+            if (value > MonthlyAchievementAwards)
+            {
+                ExcessValue = value - MonthlyAchievementAwards;
+            }
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeChristmasGift(decimal value)
+        {
+            decimal ExcessValue = 0;
+            decimal AnnualGiftAllowance = 5000;
+            decimal MonthlyGiftAllowance = 0;
+
+            MonthlyGiftAllowance = AnnualGiftAllowance / 12;
+
+            if (value > MonthlyGiftAllowance)
+            {
+                ExcessValue = value - MonthlyGiftAllowance;
+            }
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeDailyMealAllowance(decimal value)
+        {
+            decimal ExcessValue = 0;
+
+            return ExcessValue;
+        }
+
+        public decimal ComputeCollectiveBargainingAgreement(decimal value)
+        {
+            decimal ExcessValue = 0;
+            decimal AnnualCBABenefits = 10000   ;
+            decimal MonthlyCBABenefits = 0;
+
+            MonthlyCBABenefits = AnnualCBABenefits / 12;
+
+            if (value > MonthlyCBABenefits)
+            {
+                ExcessValue = value - MonthlyCBABenefits;
+            }
+
+            return ExcessValue;
+        }
+
+    }
 }
