@@ -10,7 +10,8 @@ namespace TRAIN_Calculator.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Payroll");
+            //return View();
         }
 
         public ActionResult About()
