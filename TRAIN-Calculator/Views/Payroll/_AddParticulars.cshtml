@@ -1,0 +1,130 @@
+﻿@model TRAIN_Calculator.ViewModels.PayrollViewModel
+<head>
+
+
+    <style type="text/css">
+        .btnRemove {
+            color: gray;
+            display: inline-block;
+        }
+
+            .btnRemove:hover {
+                color: red;
+            }
+    </style>
+
+
+</head>
+
+<div class="container">
+    <div class="row">
+
+        <div class="form-horizontal">
+
+            <div class="col-md-4">
+                <div class="col-md-offset-1">
+                    <h3>Compensations</h3>
+                </div>
+                <div class="col-md-offset-1">
+                    @Html.EnumDropDownListFor(model => model.PaySlipCompensations.Compensations, "Compensations", new { @class = "form-control DDL_CompensationList", data_toggle = "tooltip", data_placement = "right", title = "Add Compensation" })
+                </div>
+
+
+                <dl id="CompensationList" class="list-group">
+
+                    <dd class="col-md-offset-1 hide" id="@Html.DisplayNameFor(model => model.PaySlipCompensations.Allowance)">
+                        <h5>
+                            @Html.DisplayNameFor(model => model.PaySlipCompensations.Allowance) <i class="fas fa-trash-alt btnRemove"></i>
+                        </h5>
+                        @Html.EditorFor(model => model.PaySlipCompensations.Allowance, new { htmlAttributes = new { @class = "form-control " + @Html.DisplayNameFor(model => model.PaySlipCompensations.Allowance) + "" } })
+                        @Html.ValidationMessageFor(model => model.PaySlipCompensations.Allowance, "", new { @class = "text-danger" })
+                    </dd>
+
+                    <dd class="col-md-offset-1 hide" id="@Html.DisplayNameFor(model => model.PaySlipCompensations.ECOLA)">
+                        <h5>
+                            @Html.DisplayNameFor(model => model.PaySlipCompensations.ECOLA) <i class="fas fa-trash-alt btnRemove"></i>
+                        </h5>
+                        @Html.EditorFor(model => model.PaySlipCompensations.ECOLA, new { htmlAttributes = new { @class = "form-control", attr_id = Html.DisplayNameFor(model => model.PaySlipCompensations.ECOLA) } })
+                        @Html.ValidationMessageFor(model => model.PaySlipCompensations.ECOLA, "", new { @class = "text-danger" })
+                    </dd>
+
+
+                    <dd class="col-md-offset-1 hide" id="@Html.DisplayNameFor(model => model.PaySlipCompensations.HolidayPay)">
+                        <h5>
+                            @Html.DisplayNameFor(model => model.PaySlipCompensations.HolidayPay) <i class="fas fa-trash-alt btnRemove"></i>
+                        </h5>
+                        @Html.EditorFor(model => model.PaySlipCompensations.HolidayPay, new { htmlAttributes = new { @class = "form-control", attr_id = Html.DisplayNameFor(model => model.PaySlipCompensations.HolidayPay) } })
+                        @Html.ValidationMessageFor(model => model.PaySlipCompensations.HolidayPay, "", new { @class = "text-danger" })
+                    </dd>
+
+
+                </dl>
+            </div>
+            <div class="col-md-4">
+                <div class="col-md-offset-1">
+                    <h3>Deductions</h3>
+                </div>
+                <div class="col-md-offset-1">
+                    @Html.EnumDropDownListFor(model => model.PaySlipDeductions.Deductions, "Deductions", new { @class = "form-control DDL_DeductionList", data_toggle = "tooltip", data_placement = "right", title = "Add Deductions" })
+                </div>
+
+
+                <dl id="DeductionList" class="list-group">
+
+                    <dd class="col-md-offset-1 hide" id="@Html.DisplayNameFor(model => model.PaySlipDeductions.SSSLoan)">
+                        <h5>
+                            @Html.DisplayNameFor(model => model.PaySlipDeductions.SSSLoan) <i class="fas fa-trash-alt btnRemove"></i>
+                        </h5>
+                        @Html.EditorFor(model => model.PaySlipDeductions.SSSLoan, new { htmlAttributes = new { @class = "form-control " + @Html.DisplayNameFor(model => model.PaySlipDeductions.SSSLoan) + "" } })
+                        @Html.ValidationMessageFor(model => model.PaySlipDeductions.SSSLoan, "", new { @class = "text-danger" })
+                    </dd>
+
+
+                    <dd class="col-md-offset-1 hide" id="@Html.DisplayNameFor(model => model.PaySlipDeductions.PAGIBIGLoan)">
+                        <h5>
+                            @Html.DisplayNameFor(model => model.PaySlipDeductions.PAGIBIGLoan) <i class="fas fa-trash-alt btnRemove"></i>
+                        </h5>
+                        @Html.EditorFor(model => model.PaySlipDeductions.PAGIBIGLoan, new { htmlAttributes = new { @class = "form-control " + @Html.DisplayNameFor(model => model.PaySlipDeductions.PAGIBIGLoan) + "" } })
+                        @Html.ValidationMessageFor(model => model.PaySlipDeductions.PAGIBIGLoan, "", new { @class = "text-danger" })
+                    </dd>
+
+
+                </dl>
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="col-md-offset-1">
+                    <h3>De Minimis</h3>
+                </div>
+                <div class="col-md-offset-1">
+                    @Html.EnumDropDownListFor(model => model.PaySlipDeMinimis.DeMinimis, "De Minimis", new { @class = "form-control DDL_DeMinimis", data_toggle = "tooltip", data_placement = "right", title = "Add De Minimis" })
+                </div>
+
+                <dl id="DeMinimisList" class="list-group">
+
+                    <dd class="col-md-offset-1 hide" id="@Html.DisplayNameFor(model => model.PaySlipDeMinimis.RiceAllowance)">
+                        <h5>
+                            @Html.DisplayNameFor(model => model.PaySlipDeMinimis.RiceAllowance) <i class="fas fa-trash-alt btnRemove"></i>
+                        </h5>
+                        @Html.EditorFor(model => model.PaySlipDeMinimis.RiceAllowance, new { htmlAttributes = new { @class = "form-control " + @Html.DisplayNameFor(model => model.PaySlipDeMinimis.RiceAllowance) + "" } })
+                        @Html.ValidationMessageFor(model => model.PaySlipDeMinimis.RiceAllowance, "", new { @class = "text-danger" })
+                    </dd>
+
+                    <dd class="col-md-offset-1 hide" id="@Html.DisplayNameFor(model => model.PaySlipDeMinimis.LaundryAllowance)">
+                        <h5>
+                            @Html.DisplayNameFor(model => model.PaySlipDeMinimis.LaundryAllowance) <i class="fas fa-trash-alt btnRemove"></i>
+                        </h5>
+                        @Html.EditorFor(model => model.PaySlipDeMinimis.LaundryAllowance, new { htmlAttributes = new { @class = "form-control " + @Html.DisplayNameFor(model => model.PaySlipDeMinimis.LaundryAllowance) + "" } })
+                        @Html.ValidationMessageFor(model => model.PaySlipDeMinimis.LaundryAllowance, "", new { @class = "text-danger" })
+                    </dd>
+
+
+
+                </dl>
+            </div>
+
+        </div>
+
+    </div>
+</div>
