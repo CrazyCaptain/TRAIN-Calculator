@@ -15,13 +15,13 @@ namespace TRAIN_Calculator.ViewModels
 
     public class PayrollCompensationViewModel
     {
-        public Compensations Compensation { get; set; }
+        public CompensationType Compensation { get; set; }
         public decimal Value { get; set; }
     }
 
     public class PayrollDeductionViewModel
     {
-        public Deductions Deduction { get; set; }
+        public DeductionType Deduction { get; set; }
         public decimal Value { get; set; }
     }
 

@@ -66,7 +66,7 @@ namespace TRAIN_Calculator.Models
         public decimal ThirteenMonthPay { get; set; }
 
 
-        public Compensations? Compensations { get; set; }
+        public CompensationType? Compensations { get; set; }
     }
 
     public class PaySlipDeduction
@@ -88,7 +88,7 @@ namespace TRAIN_Calculator.Models
         public decimal CashAdvances { get; set; }
 
 
-        public Deductions? Deductions { get; set; }
+        public DeductionType? Deductions { get; set; }
 
     }
 
@@ -155,7 +155,7 @@ namespace TRAIN_Calculator.Models
         Monthly
     }
 
-    public enum Compensations
+    public enum CompensationType
     {
         [Display(Name = "Overtime Pay")]
         OvertimePay,
@@ -204,7 +204,7 @@ namespace TRAIN_Calculator.Models
         CollectiveBargainingAgreement,
     }
 
-    public enum Deductions
+    public enum DeductionType
     {
         SSS,
         PAGIBIG,

@@ -1,5 +1,9 @@
 ﻿@model TRAIN_Calculator.ViewModels.PayrollViewModel
-@using TRAIN_Calculator.Models
+@{
+    Dictionary<byte, string> compensationDropdownList = (ViewBag.CompensationDropdownList != null) ? (Dictionary<byte, string>)ViewBag.CompensationDropdownList : new Dictionary<byte, string>();
+    Dictionary<byte, string> deductionDropdownList = (ViewBag.DeductionDropdownList != null) ? (Dictionary<byte, string>)ViewBag.DeductionDropdownList : new Dictionary<byte, string>();
+}
+
 <head>
     <style type="text/css">
         table.borderless td, table.borderless th {
@@ -39,9 +43,9 @@
                             <span class="glyphicon glyphicon-plus-sign" style="color:#CFA700;font-size:2em"></span>
                         </button>
                         <div class="button-dropdown-custom-content" style="right:0px;">
-                        @foreach (var item in Enum.GetValues(typeof(TRAIN_Calculator.Models.Compensations)))
+                        @foreach (var item in compensationDropdownList)
                         {
-                            <a class="button-dropdown-custom-item" data-value="@((int)item)" data-text="@item" onclick="addCompensation(this)">@item</a>
+                            <a class="button-dropdown-custom-item" data-value="@item.Key" data-text="@item.Value" onclick="addCompensation(this)">@item.Value</a>
                         }
                         </div>
                     </div>
@@ -81,9 +85,9 @@
                             <span class="glyphicon glyphicon-plus-sign" style="color:#CFA700;font-size:2em"></span>
                         </button>
                         <div class="button-dropdown-custom-content" style="right:0px;">
-                            @foreach (var item in Enum.GetValues(typeof(TRAIN_Calculator.Models.Deductions)))
+                            @foreach (var item in deductionDropdownList)
                             {
-                                <a class="button-dropdown-custom-item" data-value="@((int)item)" data-text="@item" onclick="addDeduction(this)">@item</a>
+                                <a class="button-dropdown-custom-item" data-value="@item.Key" data-text="@item.Value" onclick="addDeduction(this)">@item.Value</a>
                             }
                         </div>
                     </div>
