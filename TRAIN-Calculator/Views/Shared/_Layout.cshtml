@@ -20,11 +20,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Train Law Calculator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", style = "color:#fff;" })
+                @Html.ActionLink("Train Law Calculator", "Index", "Home", null, new { @class = "navbar-brand", style = "color:#fff;" })
             </div>
             <div class="navbar-collapse collapse navbar-right">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Train Calculator", "Index", "Payroll")</li>      
+                    <li>@Html.ActionLink("About", "About", "Home")</li>      
                     <li>@Html.ActionLink("Timeline", "Index", "Home")</li>   
                 </ul>
             </div>
@@ -33,8 +33,9 @@
     <div class="container body-content">
         @RenderBody()
     </div>
-    <footer>
-        @*<p>&copy; @DateTime.Now.Year - Spectres.Solutions Inc.</p>*@
+    <footer class="footer">
+        <img src="~/Content/Images/Logo/spec-bulb-white-200.jpg" style="height:50px;" />
+        <span style="font-size:1.4em;color:#fff;font-family:Calibri">&copy; Spectres.Solutions Inc.</span>
     </footer>
 
     @Scripts.Render("~/bundles/jquery")

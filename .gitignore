@@ -245,3 +245,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/TRAIN-Calculator/Properties/PublishProfiles/spectressolutions-traincalculator-staging - FTP.pubxml

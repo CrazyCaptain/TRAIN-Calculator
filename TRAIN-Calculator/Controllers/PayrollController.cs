@@ -9,7 +9,8 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.IO;
-
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
 
 namespace TRAIN_Calculator.Controllers
 {
@@ -37,7 +38,7 @@ namespace TRAIN_Calculator.Controllers
             model.Deductions = model.Deductions ?? new List<PayrollDeductionViewModel>();
 
 
-            if (!(model.PaySlips.BasicSalary > 0) || !(model.PaySlips.ExpectedWorkedHours > 0) || !(model.PaySlips.TotalHoursWorked > 0))
+            if (model.PaySlips == null)
             {
                 return View("Index", model);
             }
@@ -55,26 +56,26 @@ namespace TRAIN_Calculator.Controllers
             // Add Overtime if applicable
             var overtimePay = ComputeOvertimePay(model.PaySlips.OvertimeWorkedHours == null ? 0 : (int)model.PaySlips.OvertimeWorkedHours, model.PaySlips.OvertimeRatePerHour == null ? 0 : (decimal)model.PaySlips.OvertimeRatePerHour);
             List<PayrollCompensationViewModel> compensationsList = model.Compensations ?? new List<PayrollCompensationViewModel>();
-            if (!compensationsList.Any(m => m.Compensation == Compensations.OvertimePay) && overtimePay > 0)
+            if (!compensationsList.Any(m => m.Compensation == CompensationType.OvertimePay) && overtimePay > 0)
             {
-                compensationsList.Add(new PayrollCompensationViewModel() { Compensation = Compensations.OvertimePay, Value = overtimePay });
+                compensationsList.Add(new PayrollCompensationViewModel() { Compensation = CompensationType.OvertimePay, Value = overtimePay });
             }
 
             // Add SSS if not already in list
             List<PayrollDeductionViewModel> deductionsList = model.Deductions ?? new List<PayrollDeductionViewModel>();
-            if (!deductionsList.Any(m => m.Deduction == Deductions.SSS))
+            if (!deductionsList.Any(m => m.Deduction == DeductionType.SSS))
             {
-                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = Deductions.SSS, Value = ComputeSSS(BasicPay) });
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.SSS, Value = ComputeSSS(BasicPay) });
             }
             // Add PHIC if not already in list
-            if (!deductionsList.Any(m => m.Deduction == Deductions.PHIC))
+            if (!deductionsList.Any(m => m.Deduction == DeductionType.PHIC))
             {
-                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = Deductions.PHIC, Value = ComputePHIC(BasicPay) });
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.PHIC, Value = ComputePHIC(BasicPay) });
             }
             // Add PAGIBIG if not already in list
-            if (!deductionsList.Any(m => m.Deduction == Deductions.PAGIBIG))
+            if (!deductionsList.Any(m => m.Deduction == DeductionType.PAGIBIG))
             {
-                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = Deductions.PAGIBIG, Value = ComputePAGIBIG(BasicPay) });
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.PAGIBIG, Value = ComputePAGIBIG(BasicPay) });
             }
 
             model.PaySlips.TotalDeductions = model.Deductions.Sum(m => m.Value);
@@ -82,6 +83,30 @@ namespace TRAIN_Calculator.Controllers
             model.PaySlips.TaxableIncome = ComputeTaxableIncome(BasicPay + overtimePay, model.Deductions.Select(m => m.Value).ToArray());
             model.PaySlips.WithHoldingTax = ComputeTax(model.PaySlips.TaxableIncome);
             model.PaySlips.TakeHomePay = ComputeTakeHomePay(model.PaySlips.TotalCompensations, model.PaySlips.TotalDeductions, model.PaySlips.WithHoldingTax);
+
+            // Set list items for Compensation
+            Dictionary<byte, string> compenstationDropdownList = new Dictionary<byte, string>();
+            foreach (var item in Enum.GetValues(typeof(CompensationType)))
+            {
+                compenstationDropdownList.Add((byte)item, item.GetType().GetMember(item.ToString()).First().GetCustomAttribute<DisplayAttribute>().Name);
+            }
+            ViewBag.CompensationDropdownList = compenstationDropdownList;
+
+            // Set list items for DeMinimis
+            Dictionary<byte, string> deMinimisDropdownList = new Dictionary<byte, string>();
+            foreach (var item in Enum.GetValues(typeof(DeMinimisType)))
+            {
+                deMinimisDropdownList.Add((byte)item, item.GetType().GetMember(item.ToString()).First().GetCustomAttribute<DisplayAttribute>().Name);
+            }
+            ViewBag.DeMinimisDropdownList = deMinimisDropdownList;
+
+            // Set list items for Deduction
+            Dictionary<byte, string> deductionDropdownList = new Dictionary<byte, string>();
+            foreach (var item in Enum.GetValues(typeof(DeductionType)))
+            {
+                deductionDropdownList.Add((byte)item, item.GetType().GetMember(item.ToString()).First().GetCustomAttribute<DisplayAttribute>().Name);
+            }
+            ViewBag.DeductionDropdownList = deductionDropdownList;
 
             return View("Details", model); ;
         }

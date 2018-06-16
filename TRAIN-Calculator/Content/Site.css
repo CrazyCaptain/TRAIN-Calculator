@@ -1,6 +1,11 @@
-﻿html, body, .body-content {
+﻿html, body {
     height:100%;
     min-height:100%;
+}
+
+.body-content {
+    min-height: 100%;
+    padding-bottom:60px;
 }
 
 /* Override */
@@ -74,7 +79,7 @@ textarea {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 160px;
+    min-width: 320px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
@@ -127,4 +132,30 @@ textarea {
     text-align:right !important;
     border:none !important;
     outline:none;
+}
+.deminimis-table-item-value {
+    text-align:right !important;
+    border:none !important;
+    outline:none;
+}
+
+.contributor-icon {
+    height:50px;
+    width:50px;
+    border-radius:100%;
+    display:inline-block;
+}
+
+.footer {
+    padding:10px;
+    background:#CFA700;
+}
+
+.tooltip-custom-deminimis {
+
+}
+
+.tooltip-custom {
+    height:16px;
+    width:16px;
 }
