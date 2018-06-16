@@ -38,7 +38,7 @@ namespace TRAIN_Calculator.Controllers
             model.Deductions = model.Deductions ?? new List<PayrollDeductionViewModel>();
 
 
-            if (!(model.PaySlips.BasicSalary > 0) || !(model.PaySlips.ExpectedWorkedHours > 0) || !(model.PaySlips.TotalHoursWorked > 0))
+            if (model.PaySlips == null)
             {
                 return View("Index", model);
             }
@@ -88,17 +88,25 @@ namespace TRAIN_Calculator.Controllers
             Dictionary<byte, string> compenstationDropdownList = new Dictionary<byte, string>();
             foreach (var item in Enum.GetValues(typeof(CompensationType)))
             {
-                compenstationDropdownList.Add((byte)item, item.GetType().GetMember(nameof(item)).First().GetCustomAttribute<DisplayAttribute>().Name);
+                compenstationDropdownList.Add((byte)item, item.GetType().GetMember(item.ToString()).First().GetCustomAttribute<DisplayAttribute>().Name);
             }
             ViewBag.CompensationDropdownList = compenstationDropdownList;
 
-            // Set list items for Compensation
+            // Set list items for DeMinimis
+            Dictionary<byte, string> deMinimisDropdownList = new Dictionary<byte, string>();
+            foreach (var item in Enum.GetValues(typeof(DeMinimisType)))
+            {
+                deMinimisDropdownList.Add((byte)item, item.GetType().GetMember(item.ToString()).First().GetCustomAttribute<DisplayAttribute>().Name);
+            }
+            ViewBag.DeMinimisDropdownList = deMinimisDropdownList;
+
+            // Set list items for Deduction
             Dictionary<byte, string> deductionDropdownList = new Dictionary<byte, string>();
             foreach (var item in Enum.GetValues(typeof(DeductionType)))
             {
-                compenstationDropdownList.Add((byte)item, item.GetType().GetMember(nameof(item)).First().GetCustomAttribute<DisplayAttribute>().Name);
+                deductionDropdownList.Add((byte)item, item.GetType().GetMember(item.ToString()).First().GetCustomAttribute<DisplayAttribute>().Name);
             }
-            ViewBag.DeductionDropdownList = compenstationDropdownList;
+            ViewBag.DeductionDropdownList = deductionDropdownList;
 
             return View("Details", model); ;
         }

@@ -155,75 +155,82 @@ namespace TRAIN_Calculator.Models
         Monthly
     }
 
-    public enum CompensationType
+    public enum CompensationType : byte
     {
         [Display(Name = "Overtime Pay")]
-        OvertimePay,
-        
-        Allowance,
+        OvertimePay = 0,
+
+        [Display(Name = "Allowance")]
+        Allowance = 1,
         
         [Display(Name = "Holiday Pay")]
-        HolidayPay,
-        
-        ECOLA,
+        HolidayPay = 2,
 
-        [Display(Name = "Thirteen Month Pay")]
-        ThirteenMonthPay,        
+        [Display(Name = "ECOLA")]
+        ECOLA = 3,
 
-        [Display(Name = "Unused Vacation Leave")]
-        UnusedVacationLeave,
-
-        [Display(Name = "Vacation and Sick Leave Credits")]
-        VacationandSickLeaveCredits,
-
-        [Display(Name = "Medical Allowance to Employee Dependents")]
-        MedicalAllowancetoEmployeeDependents,
-
-        [Display(Name = "Rice Subsidy")]
-        RiceSubsidy,
-
-        [Display(Name = "Uniform and Clothing")]
-        UniformandClothing,
-
-        [Display(Name = "Medical Expenses")]
-        MedicalExpenses,
-
-        [Display(Name = "Laundry Allowance")]
-        LaundryAllowance,
-
-        [Display(Name = "Achievement Awards")]
-        AchievementAwards,
-
-        [Display(Name = "Christmas Gifts")]
-        ChristmasGifts,
-
-        [Display(Name = "Daily Meal Allowance")]
-        DailyMealAllowance,
-
-        [Display(Name = "Collective Bargaining Agreement")]
-        CollectiveBargainingAgreement,
+        [Display(Name = "Thirteenth Month Pay")]
+        ThirteenthMonthPay = 4,
     }
 
-    public enum DeductionType
+    public enum DeMinimisType : byte
     {
-        SSS,
-        PAGIBIG,
-        PHIC,
+        [Display(Name = "Unused Vacation Leave")]
+        UnusedVacationLeave = 0,
+
+        [Display(Name = "Vacation and Sick Leave Credits")]
+        VacationandSickLeaveCredits = 1,
+
+        [Display(Name = "Medical Allowance to Employee Dependents")]
+        MedicalAllowancetoEmployeeDependents = 2,
+
+        [Display(Name = "Rice Subsidy")]
+        RiceSubsidy = 3,
+
+        [Display(Name = "Uniform and Clothing")]
+        UniformandClothing = 4,
+
+        [Display(Name = "Medical Expenses")]
+        MedicalExpenses = 5,
+
+        [Display(Name = "Laundry Allowance")]
+        LaundryAllowance = 6,
+
+        [Display(Name = "Achievement Awards")]
+        AchievementAwards = 7,
+
+        [Display(Name = "Christmas Gifts")]
+        ChristmasGifts = 8,
+
+        [Display(Name = "Daily Meal Allowance")]
+        DailyMealAllowance = 9,
+
+        [Display(Name = "Collective Bargaining Agreement")]
+        CollectiveBargainingAgreement = 10,
+    }
+
+    public enum DeductionType : byte
+    {
+        [Display(Name = "SSS")]
+        SSS = 0,
+
+        [Display(Name = "PAGIBIG")]
+        PAGIBIG = 1,
+
+        [Display(Name = "PHIC,")]
+        PHIC = 2,
         
         [Display(Name = "SSS Loan")]
-        SSSLoan,
+        SSSLoan = 3,
 
         [Display(Name = "PAGIBIG Loan")]
-        PAGIBIGLoan,
+        PAGIBIGLoan = 4,
 
         [Display(Name = "Retirement")]
-        Retirement,
+        Retirement = 5,
 
         [Display(Name = "Cash Advances")]
-        CashAdvances 
-}
-
-  
-
+        CashAdvances = 6
+    }
 
 }

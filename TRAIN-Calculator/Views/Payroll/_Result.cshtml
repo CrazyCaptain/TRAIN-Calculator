@@ -1,6 +1,7 @@
 ﻿@model TRAIN_Calculator.ViewModels.PayrollViewModel
 @{
     Dictionary<byte, string> compensationDropdownList = (ViewBag.CompensationDropdownList != null) ? (Dictionary<byte, string>)ViewBag.CompensationDropdownList : new Dictionary<byte, string>();
+    Dictionary<byte, string> deMinimisDropdownList = (ViewBag.DeMinimisDropdownList != null) ? (Dictionary<byte, string>)ViewBag.DeMinimisDropdownList : new Dictionary<byte, string>();
     Dictionary<byte, string> deductionDropdownList = (ViewBag.DeductionDropdownList != null) ? (Dictionary<byte, string>)ViewBag.DeductionDropdownList : new Dictionary<byte, string>();
 }
 
@@ -25,7 +26,7 @@
 <div class="container">
 
     <div class="row" style="margin-top:20px;">
-        <p style="text-align:center;">
+        <p>
             <i>Bulletin: The calculator only covers non-government employees’ monthly related calculations. Other scenarios will be added according to our public timeline.</i>
         </p>
         <hr />
@@ -46,6 +47,10 @@
                         @foreach (var item in compensationDropdownList)
                         {
                             <a class="button-dropdown-custom-item" data-value="@item.Key" data-text="@item.Value" onclick="addCompensation(this)">@item.Value</a>
+                        }
+                        @foreach (var item in deMinimisDropdownList)
+                        {
+                            <a class="button-dropdown-custom-item" data-value="@item.Key" data-text="@item.Value" onclick="addDeMinimis(this)">@item.Value</a>
                         }
                         </div>
                     </div>
@@ -105,6 +110,7 @@
                                     <span class="glyphicon glyphicon-minus-sign"></span>
                                 </button>
                                 @item.Deduction
+                                <img src="~/Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="2" data-tooltip-item="@((byte)item.Deduction)"/>
                             </td>
                             <td class="td-value">
                                 <input class="deductions-table-item-value" type="number" name="Deduction[@i].Value" value="@item.Value.ToString("#0.00")" />
@@ -133,24 +139,48 @@
                     <table class="table borderless table-custom-calculator">
                         <tbody>
                             <tr>
-                                <td>Taxable Income</td>
-                                <td class="td-value">@Model.PaySlips.TaxableIncome.ToString("#,#0.00")</td>
-                            </tr>
-                            <tr>
-                                <td>WithHolding Tax</td>
-                                <td class="td-value">@Model.PaySlips.WithHoldingTax.ToString("#,#0.00")</td>
-                            </tr>
-                            <tr>
-                                <td>Total Compensation</td>
+                                <td>
+                                    Compensation
+                                    @*<i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Total Compensation is the total of all the items Taxable Compensations PLUS Excess of De Minimis"></i>*@
+                                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Compensation = Expected Pay + Overtime Pay + Bonus + Commission + Allowance"></i>
+                                </td>
                                 <td class="td-value">@Model.PaySlips.TotalCompensations.ToString("#,#0.00")</td>
                             </tr>
-
                             <tr>
-                                <td>Total Deductions</td>
+                                <td>
+                                    De Minimis
+                                    @*<i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="The De Minimis is the total of all De Minimis benefits, a list of non-taxable benefits provided by BIR"></i>*@
+                                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="The De Minimis is the total of all De Minimis benefits, a list of non-taxable benefits provided by BIR"></i>
+                                </td>
+                                <td class="td-value">@Model.PaySlips.TotalDeMinimis.ToString("#,#0.00")</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                Total Deductions
+                                    @*<i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Total Deduction is the total of all government contributions and responsibilities of the employee such as loans."></i>*@
+                                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="The total government contributions and obligation payments by the employee."></i>
+                                </td>
                                 <td class="td-value">@Model.PaySlips.TotalDeductions.ToString("#,#0.00")</td>
                             </tr>
                             <tr>
-                                <td>Take Home Pay</td>
+                                <td>
+                                    Taxable Income
+                                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Taxable Income = Compensation - Deductions"></i>
+                                </td>
+                                <td class="td-value">@Model.PaySlips.TaxableIncome.ToString("#,#0.00")</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    WithHolding Tax
+                                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Withholding Tax rate based on the Compensation Level"></i>
+                                </td>
+                                <td class="td-value">@Model.PaySlips.WithHoldingTax.ToString("#,#0.00")</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Take Home Pay
+                                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Take Home Pay = Total Compensation + De Minimis - Tax"></i>
+                                </td>
                                 <td class="td-value">@Model.PaySlips.TakeHomePay.ToString("#,#0.00")</td>
                             </tr>
                         </tbody>
