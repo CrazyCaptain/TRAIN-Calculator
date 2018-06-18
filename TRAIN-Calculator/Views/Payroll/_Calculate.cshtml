@@ -8,7 +8,7 @@
             <div class="form-group">
                 <div class="col-md-12">
                     @Html.LabelFor(m => m.PaySlips.EarnerType)
-                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Earner Type"></i>
+                    <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="The frequency of when the employee receives their pay."></i>
                     <br />
                     @Html.EnumDropDownListFor(model => model.PaySlips.EarnerType, "Please select an Earner Type", new { @class = "form-control ddl-earnerType form-input-custom", style = "display:inline-block" })
                 </div>
