@@ -144,6 +144,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Controllers\SSSTable.json" />
+    <None Include="Properties\PublishProfiles\spectressolutions-traincalculator-staging - FTP.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -172,7 +173,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Payroll\Index.cshtml" />
     <Content Include="Views\Payroll\_Calculate.cshtml" />
-    <Content Include="Views\Payroll\Details.cshtml" />
     <Content Include="Views\Payroll\_Result.cshtml" />
     <Content Include="Views\Payroll\_Contributor.cshtml" />
   </ItemGroup>

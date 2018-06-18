@@ -19,7 +19,7 @@ namespace TRAIN_Calculator.Controllers
         // GET: Payroll
         public ActionResult Index(PayrollViewModel model)
         {
-            model.PaySlips = new PaySlip();
+            model.PaySlips = model.PaySlips ?? new PaySlip();
             model.Compensations = model.Compensations ?? new List<PayrollCompensationViewModel>();
             model.Deductions = model.Deductions ?? new List<PayrollDeductionViewModel>();
             model.DeMinimis = model.DeMinimis ?? new List<PayrollDeMinimisViewModel>();
@@ -46,9 +46,7 @@ namespace TRAIN_Calculator.Controllers
 
             if (!ModelState.IsValid)
             {
-                if (model.PaySlips.BasicSalary != 0 && model.PaySlips.EarnerType != null)
-                    return View("Details", model);
-                else
+                if (model.PaySlips.BasicSalary != 0 && model.PaySlips.EarnerType != null)   
                     return View("Index", model);
             }
 
@@ -101,14 +99,14 @@ namespace TRAIN_Calculator.Controllers
 
             SetDropdowns();
 
-            return View("Details", model); ;
+            return View("Index", model); ;
         }
 
 
-        public ActionResult Details()
-        {
-            return View();
-        }
+        //public ActionResult Details()
+        //{
+        //    return View();
+        //}
 
         private void SetDropdowns()
         {
