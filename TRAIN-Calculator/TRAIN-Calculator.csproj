@@ -174,7 +174,6 @@
     <Content Include="Views\Payroll\_Calculate.cshtml" />
     <Content Include="Views\Payroll\Details.cshtml" />
     <Content Include="Views\Payroll\_Result.cshtml" />
-    <Content Include="Views\Payroll\_AddParticulars.cshtml" />
     <Content Include="Views\Payroll\_Contributor.cshtml" />
   </ItemGroup>
   <ItemGroup>
