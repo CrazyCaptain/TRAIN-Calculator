@@ -41,6 +41,10 @@ namespace TRAIN_Calculator.Models
         [Display(Name = "Taxable Income")]
         public decimal TaxableIncome { get; set; }
 
+        public decimal TotalDeminimisCompensation { get; set; }
+
+        public decimal TotalDeminimisExcess { get; set; }
+
         [Display(Name = "WithHolding Tax")]
         public decimal WithHoldingTax { get; set; }
         public decimal TakeHomePay { get; set; }
@@ -53,8 +57,6 @@ namespace TRAIN_Calculator.Models
         public decimal Bonus { get; set; }
         public decimal Commission { get; set; }
 
-
-
         public decimal Allowance { get; set; }
 
         [Display(Name = "Holiday Pay")]
@@ -64,7 +66,6 @@ namespace TRAIN_Calculator.Models
 
         [Display(Name = "Thirteen Month Pay")]
         public decimal ThirteenMonthPay { get; set; }
-
 
         public CompensationType? Compensations { get; set; }
     }
@@ -171,6 +172,12 @@ namespace TRAIN_Calculator.Models
 
         [Display(Name = "Thirteenth Month Pay")]
         ThirteenthMonthPay = 4,
+
+        [Display(Name = "Bonus")]
+        Bonues = 5,
+
+        [Display(Name = "Commission")]
+        Commission = 6
     }
 
     public enum DeMinimisType : byte
@@ -217,7 +224,7 @@ namespace TRAIN_Calculator.Models
         [Display(Name = "PAGIBIG")]
         PAGIBIG = 1,
 
-        [Display(Name = "PHIC,")]
+        [Display(Name = "PHIC")]
         PHIC = 2,
         
         [Display(Name = "SSS Loan")]

@@ -1,18 +1,33 @@
 ﻿@model TRAIN_Calculator.ViewModels.PayrollViewModel
 
-<h2></h2>
-
 @using (Html.BeginForm("Calculate", "Payroll"))
 {
     @Html.AntiForgeryToken()
     <div class="container">
 
         <div class="row">
-            <div class="col-md-4"></div>
             <div class="col-md-4" id="calculate-partial-view">
-                @Html.Partial("_Calculate", Model)
+                <div class="row">
+                    @Html.Partial("_Calculate", Model)
+                </div>
+
+                <div class="row" style="margin-top:20px;">
+                    @Html.Partial("_Contributor")
+                </div>
             </div>
-            <div class="col-md-4"></div>
+
+            <div class="col-md-8">
+
+               
+
+                <div class="row">
+                    <div class="col-md-12" id="results-partial-view">
+                        @Html.Partial("_Result", Model)
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
     </div>

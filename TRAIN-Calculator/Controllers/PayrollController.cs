@@ -17,18 +17,19 @@ namespace TRAIN_Calculator.Controllers
     public class PayrollController : Controller
     {
         // GET: Payroll
-        public ActionResult Index()
+        public ActionResult Index(PayrollViewModel model)
         {
-            var model = new PayrollViewModel()
-            {
-                PaySlips = new PaySlip(),
-                Compensations = new List<PayrollCompensationViewModel>(),
-                Deductions = new List<PayrollDeductionViewModel>()
-            };
+            model.PaySlips = new PaySlip();
+            model.Compensations = model.Compensations ?? new List<PayrollCompensationViewModel>();
+            model.Deductions = model.Deductions ?? new List<PayrollDeductionViewModel>();
+            model.DeMinimis = model.DeMinimis ?? new List<PayrollDeMinimisViewModel>();
+
+            SetDropdowns();
 
             return View(model);
         }
 
+       
 
         [HttpPost]
         public ActionResult Calculate(PayrollViewModel model)
@@ -36,7 +37,7 @@ namespace TRAIN_Calculator.Controllers
             model.PaySlips = model.PaySlips;
             model.Compensations = model.Compensations ?? new List<PayrollCompensationViewModel>();
             model.Deductions = model.Deductions ?? new List<PayrollDeductionViewModel>();
-
+            model.DeMinimis = model.DeMinimis ?? new List<PayrollDeMinimisViewModel>();
 
             if (model.PaySlips == null)
             {
@@ -45,44 +46,72 @@ namespace TRAIN_Calculator.Controllers
 
             if (!ModelState.IsValid)
             {
-                if (model.PaySlips.BasicSalary != 0)
+                if (model.PaySlips.BasicSalary != 0 && model.PaySlips.EarnerType != null)
                     return View("Details", model);
                 else
                     return View("Index", model);
             }
-            
+
             var BasicPay = ComputeExpectedPay(model.PaySlips.BasicSalary, model.PaySlips.TotalHoursWorked, model.PaySlips.ExpectedWorkedHours);
 
-            // Add Overtime if applicable
-            var overtimePay = ComputeOvertimePay(model.PaySlips.OvertimeWorkedHours == null ? 0 : (int)model.PaySlips.OvertimeWorkedHours, model.PaySlips.OvertimeRatePerHour == null ? 0 : (decimal)model.PaySlips.OvertimeRatePerHour);
             List<PayrollCompensationViewModel> compensationsList = model.Compensations ?? new List<PayrollCompensationViewModel>();
-            if (!compensationsList.Any(m => m.Compensation == CompensationType.OvertimePay) && overtimePay > 0)
-            {
-                compensationsList.Add(new PayrollCompensationViewModel() { Compensation = CompensationType.OvertimePay, Value = overtimePay });
-            }
-
-            // Add SSS if not already in list
             List<PayrollDeductionViewModel> deductionsList = model.Deductions ?? new List<PayrollDeductionViewModel>();
+
+            // Default Values 
+            var SSS = ComputeSSS(BasicPay);
+            var PHIC = ComputePHIC(BasicPay);
+            var PAGIBIG = ComputePAGIBIG(BasicPay);
+            var OTPAY = ComputeOvertimePay(model.PaySlips.OvertimeWorkedHours == null || model.PaySlips.OvertimeWorkedHours == 0 ? 0 : (int)model.PaySlips.OvertimeWorkedHours, model.PaySlips.OvertimeRatePerHour == null || model.PaySlips.OvertimeRatePerHour == 0 ? 0 : (decimal)model.PaySlips.OvertimeRatePerHour);
+
+
+            // Add Overtime if applicable    
+            if (!compensationsList.Any(m => m.Compensation == CompensationType.OvertimePay) && OTPAY > 0)
+            {
+                var otpay_value = OTPAY > 0 ? 0 : compensationsList.Where(m => m.Compensation == CompensationType.OvertimePay).SingleOrDefault().Value;
+                compensationsList.Add(new PayrollCompensationViewModel()
+                {
+                    Compensation = CompensationType.OvertimePay,
+                    Value = otpay_value > 0 ? otpay_value : OTPAY
+                });
+            }
+            // Add SSS if not already in list           
             if (!deductionsList.Any(m => m.Deduction == DeductionType.SSS))
             {
-                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.SSS, Value = ComputeSSS(BasicPay) });
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.SSS, Value = SSS });
             }
             // Add PHIC if not already in list
             if (!deductionsList.Any(m => m.Deduction == DeductionType.PHIC))
             {
-                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.PHIC, Value = ComputePHIC(BasicPay) });
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.PHIC, Value = PHIC });
             }
             // Add PAGIBIG if not already in list
             if (!deductionsList.Any(m => m.Deduction == DeductionType.PAGIBIG))
             {
-                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.PAGIBIG, Value = ComputePAGIBIG(BasicPay) });
+                deductionsList.Add(new PayrollDeductionViewModel() { Deduction = DeductionType.PAGIBIG, Value = PAGIBIG });
             }
 
+         
             model.PaySlips.TotalDeductions = model.Deductions.Sum(m => m.Value);
-            model.PaySlips.TotalCompensations = model.Compensations.Sum(m => m.Value) + BasicPay;
-            model.PaySlips.TaxableIncome = ComputeTaxableIncome(BasicPay + overtimePay, model.Deductions.Select(m => m.Value).ToArray());
+            model.PaySlips.TotalDeMinimis = ComputeDeMinimis(model.DeMinimis, model.PaySlips, false);         
+            model.PaySlips.TotalDeminimisExcess = ComputeDeMinimis(model.DeMinimis, model.PaySlips, true);
+            model.PaySlips.TotalCompensations = model.Compensations.Sum(m => m.Value) + BasicPay + model.PaySlips.TotalDeminimisExcess;
+            model.PaySlips.TaxableIncome = ComputeTaxableIncome(BasicPay + OTPAY + model.PaySlips.TotalDeminimisExcess, model.Deductions.Select(m => m.Value).ToArray());
             model.PaySlips.WithHoldingTax = ComputeTax(model.PaySlips.TaxableIncome);
-            model.PaySlips.TakeHomePay = ComputeTakeHomePay(model.PaySlips.TotalCompensations, model.PaySlips.TotalDeductions, model.PaySlips.WithHoldingTax);
+            model.PaySlips.TakeHomePay = ComputeTakeHomePay(model.PaySlips.TotalCompensations + model.PaySlips.TotalDeMinimis, model.PaySlips.TotalDeductions, model.PaySlips.WithHoldingTax);
+
+            SetDropdowns();
+
+            return View("Details", model); ;
+        }
+
+
+        public ActionResult Details()
+        {
+            return View();
+        }
+
+        private void SetDropdowns()
+        {
 
             // Set list items for Compensation
             Dictionary<byte, string> compenstationDropdownList = new Dictionary<byte, string>();
@@ -107,16 +136,7 @@ namespace TRAIN_Calculator.Controllers
                 deductionDropdownList.Add((byte)item, item.GetType().GetMember(item.ToString()).First().GetCustomAttribute<DisplayAttribute>().Name);
             }
             ViewBag.DeductionDropdownList = deductionDropdownList;
-
-            return View("Details", model); ;
         }
-
-
-        public ActionResult Details()
-        {
-            return View();
-        }
-
         public decimal ComputeSSS(decimal BasicPay)
         {
             decimal SSS = 0;
@@ -178,19 +198,11 @@ namespace TRAIN_Calculator.Controllers
             return PAGIBIG;
         }
 
-        public decimal ComputeTaxableIncome(decimal BasicPay, decimal SSS, decimal PHIC, decimal PAGIBIG)
+        public decimal ComputeTaxableIncome(decimal TotalCompensation, decimal[] deductibles)
         {
             decimal TaxableIncome = 0;
 
-            TaxableIncome = BasicPay - (SSS + PHIC + PAGIBIG);
-
-            return TaxableIncome;
-        }
-        public decimal ComputeTaxableIncome(decimal BasicPay, decimal[] deductibles)
-        {
-            decimal TaxableIncome = 0;
-
-            TaxableIncome = BasicPay - (deductibles.Sum());
+            TaxableIncome = TotalCompensation - (deductibles.Sum());
 
             return TaxableIncome;
         }
@@ -258,22 +270,7 @@ namespace TRAIN_Calculator.Controllers
             return TakeHomePay;
         }
 
-        public decimal ComputeTotalDeductions(PaySlipDeduction model)
-        {
-            decimal Total = 0;
 
-            Total = model.SSS + model.PAGIBIG + model.SSS + model.SSSLoan + model.PAGIBIGLoan;
-
-            return Total;
-        }
-        //public decimal ComputeTotalDeductions(List<PayrollDeductionViewModel> deductionViewmodelList)
-        //{
-        //    decimal Total = 0;
-
-        //    Total = model.SSS + model.PAGIBIG + model.SSS + model.SSSLoan + model.PAGIBIGLoan;
-
-        //    return Total;
-        //}
 
         public decimal ComputeTotalDeMinimis(PaySlipDeMinimis model)
         {
@@ -294,24 +291,6 @@ namespace TRAIN_Calculator.Controllers
             return Total;
         }
 
-
-        public decimal ComputeTotalCompensations(PaySlipCompensation model, decimal BasicPay)
-        {
-            decimal Total = 0;
-
-            Total = BasicPay + model.OvertimePay + model.Allowance + model.ECOLA + model.HolidayPay;
-
-            return Total;
-        }
-
-
-
-    }
-
-
-
-    public class IComputeExcessDeMinimis
-    {
         public decimal ComputeUnusedVacationLeave(decimal BasicPay, int EWH, decimal value)
         {
             decimal ExcessValue = 0;
@@ -325,7 +304,7 @@ namespace TRAIN_Calculator.Controllers
             return ExcessValue;
         }
 
-        public decimal ComputeMedicalAllowance(int value)
+        public decimal ComputeMedicalAllowance(decimal value)
         {
             decimal ExcessValue = 0;
 
@@ -435,7 +414,7 @@ namespace TRAIN_Calculator.Controllers
         public decimal ComputeCollectiveBargainingAgreement(decimal value)
         {
             decimal ExcessValue = 0;
-            decimal AnnualCBABenefits = 10000   ;
+            decimal AnnualCBABenefits = 10000;
             decimal MonthlyCBABenefits = 0;
 
             MonthlyCBABenefits = AnnualCBABenefits / 12;
@@ -448,5 +427,114 @@ namespace TRAIN_Calculator.Controllers
             return ExcessValue;
         }
 
+        public decimal ComputeDeMinimis(List<PayrollDeMinimisViewModel> dList, PaySlip pSlip, bool IsExcess)
+        {
+            decimal TotalCompensation = 0;
+            decimal TotalExcess = 0;
+            decimal ExcessValue = 0;
+
+            foreach(var item in dList)
+            {
+
+                if (item.DeMinimis == DeMinimisType.AchievementAwards)
+                {
+                    ExcessValue = ComputeAchievementAwards(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.ChristmasGifts)
+                {
+                    ExcessValue = ComputeChristmasGift(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.CollectiveBargainingAgreement)
+                {
+                    ExcessValue = ComputeCollectiveBargainingAgreement(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.DailyMealAllowance)
+                {
+                    ExcessValue = ComputeDailyMealAllowance(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.LaundryAllowance)
+                {
+                    ExcessValue = ComputeLaundryAllowance(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.MedicalAllowancetoEmployeeDependents)
+                {
+                    ExcessValue = ComputeMedicalAllowance(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.MedicalExpenses)
+                {
+                    ExcessValue = ComputeMedicalExpenses(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.RiceSubsidy)
+                {
+                    ExcessValue = ComputeRiceSubsidy(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.UniformandClothing)
+                {
+                    ExcessValue = ComputeUniformAndClothing(item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.UnusedVacationLeave)
+                {
+                    ExcessValue = ComputeUnusedVacationLeave(pSlip.BasicSalary, pSlip.ExpectedWorkedHours, item.Value);
+                    TotalCompensation += item.Value - ExcessValue;
+                    TotalExcess += ExcessValue;
+                }
+
+                if (item.DeMinimis == DeMinimisType.VacationandSickLeaveCredits)
+                {
+
+                }
+
+            }
+
+            if (IsExcess)
+                return TotalExcess;
+            else
+                return TotalCompensation;
+        }
+
+
+
+    }
+
+
+}
+
+
+public static class EnumExtensions
+{
+    public static string GetDisplayName(this Enum enumValue)
+    {
+        return enumValue.GetType()
+                        .GetMember(enumValue.ToString())
+                        .First()
+                        .GetCustomAttribute<DisplayAttribute>()
+                        .GetName();
     }
 }

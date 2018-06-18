@@ -76,20 +76,47 @@
             $(this).attr('name', 'Compensations[' + index + '].Value');
             index++;
         })
+
+        var index = 0;
+        $('.deminimis-table-item-key').each(function () {
+            $(this).attr('name', 'DeMinimis[' + index + '].DeMinimis');
+            index++;
+        })
+
+        var index = 0;
+        $('.deminimis-table-item-value').each(function () {
+            $(this).attr('name', 'DeMinimis[' + index + '].Value');
+            index++;
+        })
     }
 
     function addCompensation(element) {
-        var html = $('<tr></tr>').append($('<td></td>')
+        
+        var isExist = false;
+        $('#compensations-table label').each(function () {
+            var value = $(this).text(); 
+            if (value == element.dataset.text)
+                isExist = true;
+        })
+
+
+        if (!isExist) {
+            var html = $('<tr></tr>').append($('<td></td>')
                                         .append($('<input/>', { class: 'compensations-table-item-key', type: 'hidden', name: 'Compensations[0].Compensation', value: element.dataset.value }))
                                         .append($('<button></button>', { class: 'form-blank-input', onclick: 'removeCalculatorTableItem(this)' })
-                                            .append($('<span></span>', { class: 'glyphicon glyphicon-minus-sign' })))
-                                        .append(element.dataset.text)
-                                        .append($('<img src="../Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="0" data-tooltip-item="' + element.dataset.value + '"/>')))
+                                            .append($('<span></span>', { class: 'glyphicon glyphicon-minus-sign' }))))
+                                    .append($('<td></td>')
+                                            .append('<label>' + element.dataset.text + '</label>'))
+                                    .append($('<td></td>')
+                                            .append($('<img src="../Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="0" data-tooltip-item="' + element.dataset.value + '"/>')))
                                     .append($('<td></td>')
                                         .append($('<input />', { class: 'compensations-table-item-value', type: 'number', name: 'Compensations[0].Value', value: '0.00' })));
-        $('#compensations-table > tbody').append(html);
-        reorderCompensation();
-        initializeTooltip();
+            $('#compensations-table > tbody').append(html);
+            console.log(html);
+            reorderCompensation();
+            initializeTooltip();
+        }
+
     }
 
     // Deduction
@@ -108,17 +135,33 @@
     }
 
     function addDeduction(element) {
-        var html = $('<tr></tr>').append($('<td></td>')
-                                        .append($('<input/>', { class: 'deductions-table-item-key', type: 'hidden', name: 'Deductions[0].Deduction', value: element.dataset.value }))
-                                        .append($('<button></button>', { class: 'form-blank-input', onclick: 'removeCalculatorTableItem(this)' })
-                                            .append($('<span></span>', { class: 'glyphicon glyphicon-minus-sign' })))
-                                        .append(element.dataset.text)
-                                        .append($('<img src="../Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="2" data-tooltip-item="' + element.dataset.value + '"/>')))
-                                    .append($('<td></td>')
-                                        .append($('<input />', { class: 'deductions-table-item-value', type: 'number', name: 'Deductions[0].Value', value: '0.00' })));
-        $('#deductions-table > tbody').append(html);
-        reorderDeduction();
-        initializeTooltip();
+
+        var isExist = false;
+        $('#deductions-table label').each(function () {
+            var value = $(this).text(); 
+            if (value == element.dataset.text)
+                isExist = true;
+        })
+
+
+        if (!isExist) {
+        
+            var html = $('<tr></tr>').append($('<td></td>')
+                                       .append($('<input/>', { class: 'deductions-table-item-key', type: 'hidden', name: 'Deductions[0].Deduction', value: element.dataset.value }))
+                                       .append($('<button></button>', { class: 'form-blank-input', onclick: 'removeCalculatorTableItem(this)' })
+                                           .append($('<span></span>', { class: 'glyphicon glyphicon-minus-sign' }))))
+                                   .append($('<td></td>')
+                                           .append('<label>' + element.dataset.text + '</label>'))
+                                   .append($('<td></td>')
+                                           .append($('<img src="../Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="2" data-tooltip-item="' + element.dataset.value + '"/>')))
+                                   .append($('<td></td>')
+                                       .append($('<input />', { class: 'deductions-table-item-value', type: 'number', name: 'Deductions[0].Value', value: '0.00' })));
+            $('#deductions-table > tbody').append(html);
+
+
+            reorderDeduction();
+            initializeTooltip();
+        }
     }
 
     // DeMinimis
@@ -137,18 +180,35 @@
     }
 
     function addDeMinimis(element) {
-        var html = $('<tr></tr>').append($('<td></td>')
-                                        .append($('<input/>', { class: 'deminimis-table-item-key', type: 'hidden', name: 'DeMinimis[0].DeMinimis', value: element.dataset.value }))
-                                        .append($('<button></button>', { class: 'form-blank-input', onclick: 'removeCalculatorTableItem(this)' })
-                                            .append($('<span></span>', { class: 'glyphicon glyphicon-minus-sign' })))
-                                        .append(element.dataset.text)
-                                        .append($('<img src="../Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="1" data-tooltip-item="' + element.dataset.value + '"/>'))
-                                        .append($('<img src="../Icons/tax-shield-icon.png" class="tooltip-custom" data-toggle="tooltip" title="A list of non-taxable benefits provided by BIR. Each De Minimis Benefit has limitations set by BIR, anything excess to the limit will be automatically added as Compensation which is subject to taxation"/>')))
-                                    .append($('<td></td>')
-                                        .append($('<input />', { class: 'deminimis-table-item-value', type: 'number', name: 'DeMinimis[0].Value', value: '0.00' })));
-        $('#compensations-table > tbody').append(html);
-        reorderDeMinimis();
-        initializeTooltip();
+
+        var isExist = false;
+        $('#compensations-table label').each(function () {
+            var value = $(this).text(); 
+            if (value == element.dataset.text)
+                isExist = true;
+        })
+
+
+        if (!isExist) {
+
+            var html = $('<tr></tr>').append($('<td></td>')
+                                      .append($('<input/>', { class: 'deminimis-table-item-key', type: 'hidden', name: 'DeMinimis[0].DeMinimis', value: element.dataset.value }))
+                                      .append($('<button></button>', { class: 'form-blank-input', onclick: 'removeCalculatorTableItem(this)' })
+                                          .append($('<span></span>', { class: 'glyphicon glyphicon-minus-sign' }))))
+                                  .append($('<td></td>')
+                                          .append('<label>' + element.dataset.text + '</label>'))
+                                  .append($('<td></td>')
+                                          .append($('<img src="../Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="1" data-tooltip-item="' + element.dataset.value + '"/>'))
+                                            .append($('<img src="../Icons/tax-shield-icon.png" class="tooltip-custom" data-toggle="tooltip" title="A list of non-taxable benefits provided by BIR. Each De Minimis Benefit has limitations set by BIR, anything excess to the limit will be automatically added as Compensation which is subject to taxation"/>')))
+                                  .append($('<td></td>')
+                                      .append($('<input />', { class: 'deminimis-table-item-value', type: 'number', name: 'DeMinimis[0].Value', value: '0.00' })));
+            $('#compensations-table > tbody').append(html);
+
+
+
+            reorderDeMinimis();
+            initializeTooltip();
+        }
     }
 
 </script>
@@ -168,55 +228,59 @@
         [
             [
                 // OvertimePay
-                "Total overtime pay given to an employee",
+                "Total overtime pay given to an employee.",
                 // Allowance
                 "Allowance given to an employee. For example, Gas Allowance, Transportation Allowance, etc.",
                 // HolidayPay
-                "Total holiday pay given to an employee",
+                "Total holiday pay given to an employee.",
                 // ECOLA
-                "Emergency Cost of Living Allowance",
+                "Emergency Cost of Living Allowance.",
                 // ThirteenthMonthPay
-                "A non taxable compensation required by law and given at the end of the year"
+                "A non taxable compensation required by law and given at the end of the year.",
+                // Bonus
+                "An amount of money added to wages on a seasonal basis, especially as a reward for good performance.",
+                // Commission 
+                "A fee for services rendered based on a percentage of an amount received or collected or agreed to be paid (as distinguished from a salary)."
             ],
             [
                 // UnusedVacationLeave
-                "Monetized unused vacation leave credits of private employees not exceeding ten(10) days during the year",
+                "Monetized unused vacation leave credits of private employees not exceeding ten(10) days during the year.",
                 // VacationandSickLeaveCredits
-                "Monetized value of vacation and sick leave dedits paid to government officials and employees",
+                "Monetized value of vacation and sick leave dedits paid to government officials and employees.",
                 // MedicalAllowancetoEmployeeDependents
-                "Medical cash allowance to dependents of employees not exceeding P1,500.00 per employee per semester or P250.00 per month",
+                "Medical cash allowance to dependents of employees not exceeding P1,500.00 per employee per semester or P250.00 per month.",
                 // RiceSubsidy
-                "Rice sibsidy of P2,000.00 or one(1) sack of 50kg. rice per month amounting to not more than P2,000.00",
+                "Rice subsidy of P2,000.00 or one(1) sack of 50kg. rice per month amounting to not more than P2,000.00",
                 // UniformandClothing
                 "Uniform ans clothing allowance not exceeding P6,000.00 per annum",
                 // MedicalExpenses
-                "Actual medical assistance, e.g. medical allowance to cover medical and healthcare needs, annual medical/executive check-up, maternity assistance, and routine consultations, not exceeding P10,000.00 per annum",
+                "Actual medical assistance, e.g. medical allowance to cover medical and healthcare needs, annual medical/executive check-up, maternity assistance, and routine consultations, not exceeding P10,000.00 per annum.",
                 // LaundryAllowance
-                "Laundry allowance not exceeding P300 per month",
+                "Laundry allowance not exceeding P300 per month.",
                 // AchievementAwards
-                "Employees achievement awards, e.g., for length of service or safety achievement, which must be in the form of a tangible personal property other than cash or gift certificate, with an annual monetary value not exceeding P10,000 received by the employee under an established written plan which does not discriminate in favor of highly paid employees",
+                "Employees achievement awards, e.g., for length of service or safety achievement, which must be in the form of a tangible personal property other than cash or gift certificate, with an annual monetary value not exceeding P10,000 received by the employee under an established written plan which does not discriminate in favor of highly paid employees.",
                 // ChristmasGifts
-                "Gifts given during Christmas and major anniversary celebrations not exceeding P5,000 per employee per annum",
+                "Gifts given during Christmas and major anniversary celebrations not exceeding P5,000 per employee per annum.",
                 // DailyMealAllowance
-                "Daily meal allowance for overtime work and night/graveyard shift not exceeding twenty-five percent (25%) of the basic minimum wage on a per region basis",
+                "Daily meal allowance for overtime work and night/graveyard shift not exceeding twenty-five percent (25%) of the basic minimum wage on a per region basis.",
                 // CollectiveBargainingAgreement
-                "Benefits received by an employee by virtue of a collective bargaining agreement (CBA) and productivity incentive schemes provided that the total monetary value received from both CBA and productivity incentive schemes combined do not exceed P10,000.00 per employee per taxable year"
+                "Benefits received by an employee by virtue of a collective bargaining agreement (CBA) and productivity incentive schemes provided that the total monetary value received from both CBA and productivity incentive schemes combined do not exceed P10,000.00 per employee per taxable year."
             ],
             [
                 // SSS
-                "Employee contribution for Social Security Services",
+                "Employee contribution for Social Security Services.",
                 // PAGIBIG
-                "Employee contribution for the PAGIBIG fund",
+                "Employee contribution for the PAGIBIG fund.",
                 // PHIC
-                "Employee contribution for the Philippine Health Insurance Corporation",
+                "Employee contribution for the Philippine Health Insurance Corporation.",
                 // SSSLoan
-                "Payment for credit borrowed by the employee from SSS",
+                "Payment for credit borrowed by the employee from SSS.",
                 // PAGIBIGLoan
-                "Payment for credit borrowed by the employee from PAGIBIG",
+                "Payment for credit borrowed by the employee from PAGIBIG.",
                 // Retirement
-                "Employee's contributions given to a retirement fund",
+                "Employee's contributions given to a retirement fund.",
                 // CashAdvances
-                "Payment for the money borrowed from a creditor"
+                "Payment for the money borrowed from a creditor."
             ]
         ];
 

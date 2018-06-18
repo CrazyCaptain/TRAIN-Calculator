@@ -43,37 +43,65 @@
                         <button type="button" class="form-blank-input button-dropdown-custom">
                             <span class="glyphicon glyphicon-plus-sign" style="color:#CFA700;font-size:2em"></span>
                         </button>
+
                         <div class="button-dropdown-custom-content" style="right:0px;">
-                        @foreach (var item in compensationDropdownList)
-                        {
-                            <a class="button-dropdown-custom-item" data-value="@item.Key" data-text="@item.Value" onclick="addCompensation(this)">@item.Value</a>
-                        }
-                        @foreach (var item in deMinimisDropdownList)
-                        {
-                            <a class="button-dropdown-custom-item" data-value="@item.Key" data-text="@item.Value" onclick="addDeMinimis(this)">@item.Value</a>
-                        }
+                            @foreach (var item in compensationDropdownList)
+                            {
+                                <a class="button-dropdown-custom-item" data-value="@item.Key" data-text="@item.Value" onclick="addCompensation(this)">@item.Value</a>
+                            }
+                            @foreach (var item in deMinimisDropdownList)
+                            {
+                                <a class="button-dropdown-custom-item" data-value="@item.Key" data-text="@item.Value" onclick="addDeMinimis(this)">@item.Value</a>
+                            }
                         </div>
                     </div>
                 </div>
 
                 <table id="compensations-table" class="table borderless table-custom-calculator">
                     <tbody>
-                    @for (int i = 0; i < Model.Compensations.Count; i++)
-                    { 
-                        var item = Model.Compensations[i];
-                        <tr>
-                            <td>
-                                <input class="compensations-table-item-key" type="hidden" name="Compensations[@i].Compensation" value="@((int)item.Compensation)" />
-                                <button type="button" class="form-blank-input" onclick="removeCalculatorTableItem(this)">
-                                    <span class="glyphicon glyphicon-minus-sign"></span>
-                                </button>
-                                @item.Compensation
-                            </td>
-                            <td class="td-value">
-                                <input class="compensations-table-item-value" type="number" name="Compensations[@i].Value" value="@item.Value.ToString("#0.00")" />
-                            </td>
-                        </tr>
-                    }
+                        @for (int i = 0; i < Model.Compensations.Count; i++)
+                        {
+                            var item = Model.Compensations[i];
+                            <tr>
+                                <td>
+                                    <input class="compensations-table-item-key" type="hidden" name="Compensations[@i].Compensation" value="@((int)item.Compensation)" />
+                                    <button type="button" class="form-blank-input" onclick="removeCalculatorTableItem(this)">
+                                        <span class="glyphicon glyphicon-minus-sign"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label>@item.Compensation.GetDisplayName()</label>
+                                </td>
+                                <td>
+                                    <img src="~/Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="0" data-tooltip-item="@((byte)item.Compensation)" />
+                                </td>
+                                <td class="td-value">
+                                    <input class="compensations-table-item-value" type="number" name="Compensations[@i].Value" value="@item.Value.ToString("#0.00")" />
+                                </td>
+                            </tr>
+                        }
+
+                        @for (int i = 0; i < Model.DeMinimis.Count; i++)
+                        {
+                            var item = Model.DeMinimis[i];
+                            <tr>
+                                <td>
+                                    <input class="deminimis-table-item-key" type="hidden" name="DeMinimis[@i].DeMinimis" value="@((int)item.DeMinimis)" />
+                                    <button type="button" class="form-blank-input" onclick="removeCalculatorTableItem(this)">
+                                        <span class="glyphicon glyphicon-minus-sign"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label>@item.DeMinimis.GetDisplayName()</label>
+                                </td>
+                                <td>
+                                    <img src="~/Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="1" data-tooltip-item="@((byte)item.DeMinimis)" /><img src="../Icons/tax-shield-icon.png" class="tooltip-custom" data-toggle="tooltip" title="A list of non-taxable benefits provided by BIR. Each De Minimis Benefit has limitations set by BIR, anything excess to the limit will be automatically added as Compensation which is subject to taxation" />
+                                </td>
+                                <td class="td-value">
+                                    <input class="deminimis-table-item-value" type="number" name="DeMinimis[@i].Value" value="@item.Value.ToString("#0.00")" />
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -100,23 +128,30 @@
 
                 <table id="deductions-table" class="table borderless table-custom-calculator">
                     <tbody>
-                    @for (int i = 0; i < Model.Deductions.Count; i++)
-                    {
-                        var item = Model.Deductions[i];
-                        <tr>
-                            <td>
-                                <input class="deductions-table-item-key" type="hidden" name="Deduction[@i].Deduction" value="@((int)item.Deduction)" />
-                                <button type="button" class="form-blank-input" onclick="removeCalculatorTableItem(this)">
-                                    <span class="glyphicon glyphicon-minus-sign"></span>
-                                </button>
-                                @item.Deduction
-                                <img src="~/Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="2" data-tooltip-item="@((byte)item.Deduction)"/>
-                            </td>
-                            <td class="td-value">
-                                <input class="deductions-table-item-value" type="number" name="Deduction[@i].Value" value="@item.Value.ToString("#0.00")" />
-                            </td>
-                        </tr>
-                    }
+                        @for (int i = 0; i < Model.Deductions.Count; i++)
+                        {
+                            var item = Model.Deductions[i];
+                            <tr>
+                                <td>
+                                    <input class="deductions-table-item-key" type="hidden" name="Deduction[@i].Deduction" value="@((int)item.Deduction)" />
+                                    <button type="button" class="form-blank-input" onclick="removeCalculatorTableItem(this)">
+                                        <span class="glyphicon glyphicon-minus-sign"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label>@item.Deduction.GetDisplayName()</label>
+                                </td>
+                                <td>
+                                    <img src="~/Icons/tooltipicon.png" class="tooltip-custom" data-toggle="tooltip" data-tooltip-table="2" data-tooltip-item="@((byte)item.Deduction)" />
+                                </td>
+                                <td class="td-value">
+                                    <input class="deductions-table-item-value" type="number" name="Deduction[@i].Value" value="@item.Value.ToString("#0.00")" />
+                                </td>
+                            </tr>
+
+                           
+
+                        }
                     </tbody>
                 </table>
             </div>
@@ -156,7 +191,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                Total Deductions
+                                    Total Deductions
                                     @*<i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="Total Deduction is the total of all government contributions and responsibilities of the employee such as loans."></i>*@
                                     <i class="fas fa-info-circle" style="display:inline-block; color: #CFA700; margin-left:4px;" data-toggle="tooltip" data-placement="right" title="The total government contributions and obligation payments by the employee."></i>
                                 </td>
